@@ -6,20 +6,20 @@ var app = angular.module("main", ["router"]).config(['$httpProvider', function($
 
 app.directive("markdown", function($timeout){
 	return function(scope, el, attr){
-		scope.$watch("post.body", doMarkdownAndTex);
-		
-		scope.$watch("newPostBody", doMarkdownAndTex);
+		scope.$watch(attr.markdown, doMarkdownAndTex);
 
 		function doMarkdownAndTex(val){
 			if(val){
 				el[0].innerHTML = markdown.toHTML(val);
 				$timeout(function(){
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub, "preview"]);
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub, el[0]]);
 				}, 200);
 				
-			}else{
+			}
+			else{
 				el[0].innerHTML = "";
 			}
 		}
 	};
+	
 });

@@ -14,7 +14,11 @@ router.factory("setTitle", function($rootScope){
 });
 
 
-function mainCtrl(){
+function mainCtrl($scope, $http, setTitle){
+	setTitle("Some Blog");
+	$http.get("/api/posts").success(function(posts){
+		$scope.posts = posts;
+	});
 
 }
 

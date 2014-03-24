@@ -7,4 +7,5 @@ module.exports = function(db){
 
 	this.post("/api/newpost", posts.newPost);
 	this.get("/api/post/:slug", posts.getPost);
+	this.get("/api/posts", posts.getAll);
 };

@@ -53,6 +53,20 @@ module.exports = function(config){
 				});
 			});
 			return q.promise;
+		},
+
+		getAllPosts: function(start, amt){
+			var q = Q.defer();
+			amt = amt || 10;
+			db.then(function(client){
+				var c = client.collection("posts");
+
+				c.find().sort({_id:-1}).skip(start).limit(10).toArray(function(err, posts){
+					q.resolve(posts);
+				});
+			});
+
+			return q.promise;
 		}
 	};
 };

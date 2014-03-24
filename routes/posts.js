@@ -19,6 +19,13 @@ module.exports = function(db){
 			}, function(){
 				res.send(404);
 			});
+		},
+		getAll: function(req, res){
+			var start = req.query.start || 0;
+			var amt = req.query.amt || 10;
+			db.getAllPosts(start, amt).then(function(posts){
+				res.send(posts);
+			});
 		}
 	};
 };
