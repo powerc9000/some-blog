@@ -1,0 +1,27 @@
+{
+  "name": "some-blog",
+  "version": "0.0.0",
+  "description": "Just some blog. It's probably not even good.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/powerc9000/some-blog.git"
+  },
+  "keywords": [
+    "Blog",
+    "not-even-good"
+  ],
+  "author": "powerc9000",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/powerc9000/some-blog/issues"
+  },
+  "homepage": "https://github.com/powerc9000/some-blog",
+  "dependencies": {
+    "express": "~3.5.0",
+    "ejs": "~0.8.6"
+  }
+}

@@ -1,0 +1,17 @@
+<html ng-app="main">
+	<head>
+		<title>{{page_title || "Some Blog"}}</title>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+		<script src="js/router.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<ng-view></ng-view>
+		</div>
+		
+	</body>
+</html>

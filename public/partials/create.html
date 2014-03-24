@@ -1,0 +1,16 @@
+<h1>Create a new post</h1>
+<div class="create_form">
+	<form ng-submit="newPost()">
+		<div class="form-group">
+			<label for="postTitle">Title</label>
+			<input type="text" class="form-control input-lg" id="postTitle" placeholder="Post title">
+		</div>
+		<div class="form-group">
+			<label for="postBody">Post</label>
+			<textarea name="" id="postBody" rows="20" placeholder="Post body" class="form-control"></textarea>
+		</div>
+		<button class="btn btn-primary" type="submit">Publish</button>
+		<button class="btn btn-info" ng-click="draft()">Save as draft</button>
+		<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+	</form>
+</div>
