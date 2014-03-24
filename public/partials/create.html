@@ -1,16 +1,22 @@
 <h1>Create a new post</h1>
-<div class="create_form">
-	<form ng-submit="newPost()">
-		<div class="form-group">
-			<label for="postTitle">Title</label>
-			<input type="text" class="form-control input-lg" id="postTitle" placeholder="Post title">
-		</div>
-		<div class="form-group">
-			<label for="postBody">Post</label>
-			<textarea name="" id="postBody" rows="20" placeholder="Post body" class="form-control"></textarea>
-		</div>
-		<button class="btn btn-primary" type="submit">Publish</button>
-		<button class="btn btn-info" ng-click="draft()">Save as draft</button>
-		<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
-	</form>
+<div class="row-fluid">
+	<div class="create-form col-md-8">
+		<form ng-submit="newPost()">
+			<div class="form-group">
+				<label for="postTitle">Title</label>
+				<input type="text" class="form-control input-lg" id="postTitle" placeholder="Post title" ng-model="newPostTitle">
+			</div>
+			<div class="form-group">
+				<label for="postBody">Post</label>
+				<textarea name="" id="postBody" rows="20" placeholder="Post body" class="form-control" ng-model="newPostBody"></textarea>
+			</div>
+			<button class="btn btn-primary" type="submit">Publish</button>
+			<button class="btn btn-info" ng-click="draft()">Save as draft</button>
+			<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+		</form>
+	</div>
+	<div class="new-post-preview col-md-4">
+		<h3>Preview</h3>
+		<div markdown id="preview"></div>
+	</div>
 </div>

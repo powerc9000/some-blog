@@ -11,6 +11,7 @@ var http = require('http');
 var path = require('path');
 var ejs = require("ejs");
 var app = express();
+var db = require("./database")();
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -26,13 +27,17 @@ app.use(express.cookieParser('some secret'));
 app.use(express.cookieSession());
 app.use(express.csrf());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(req, res, next) {
+	res.cookie('XSRF-TOKEN', req.csrfToken());
+	next();
+});
 app.use(app.router);
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-router.call(app);
+router.call(app, db);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
