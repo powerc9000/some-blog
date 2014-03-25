@@ -6,6 +6,8 @@ module.exports = function(db){
 	});
 
 	this.post("/api/newpost", posts.newPost);
+	this.post("/api/editpost", posts.edit);
+	this.post("/api/deletepost/:slug", posts.deletePost);
 	this.get("/api/post/:slug", posts.getPost);
 	this.get("/api/posts", posts.getAll);
 };

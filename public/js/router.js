@@ -4,7 +4,9 @@ router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
 	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
 	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html"})
-	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"});
+	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html"})
+	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
+	.otherwise({"redirectTo":"/"})
 });
 
 router.factory("setTitle", function($rootScope){
@@ -22,6 +24,24 @@ function mainCtrl($scope, $http, setTitle){
 
 }
 
+function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
+	$scope.action = "Edit";
+	$http.get("/api/post/"+$routeParams.slug).success(function(data){
+		$scope.newPostTitle = data.title;
+		$scope.newPostBody = data.body;
+		$scope.post = data;
+		setTitle(data.title);
+	});
+	$scope.newPost = function(){
+		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug}).success(function(data){
+			$location.path("/post/"+$scope.post.slug);
+			//alert("Okay");
+		}).error(function(){
+			alert("Not okay");
+		});
+	}
+}
+
 function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 	$http.get("/api/post/"+$routeParams.slug).success(function(data){
 		console.log(data);
@@ -32,9 +52,26 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 		$location.path("/");
 		
 	});
+
+	$scope.deletePost = function(){
+		function doDelete(){
+			$http.post("/api/deletepost/"+$routeParams.slug).success(function(){
+				alertify.success("Post deleted successfully");
+				$location.path("/");
+			}).error(function(data){
+				console.log(data);
+			})
+		}
+		alertify.confirm("Are you sure you want to delete this post", function(e){
+			if(e){
+				doDelete();
+			}
+		})
+	}
 }
 
 function createCtrl($scope, $http, $location, setTitle){
+	$scope.action = "Create"
 	setTitle("Create Post");
 	$scope.newPost = function(){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){

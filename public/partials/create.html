@@ -1,4 +1,8 @@
-<h1>Create a new post</h1>
+<div ng-switch on="action">
+
+	<h1 ng-switch-when="Edit">Edit post</h1>
+	<h1 ng-switch-when="Create">Create a new Post</h1>
+</div>
 <div class="row-fluid">
 	<div class="create-form col-md-8">
 		<form ng-submit="newPost()">
@@ -10,9 +14,17 @@
 				<label for="postBody">Post</label>
 				<textarea name="" id="postBody" rows="20" placeholder="Post body" class="form-control" ng-model="newPostBody"></textarea>
 			</div>
-			<button class="btn btn-primary" type="submit">Publish</button>
-			<button class="btn btn-info" ng-click="draft()">Save as draft</button>
-			<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+			<ng-switch on="action">
+				<div ng-switch-when="Create">
+					<button class="btn btn-primary" type="submit">Publish</button>
+					<button class="btn btn-info" ng-click="draft()">Save as draft</button>
+					<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+				</div>
+				<div ng-switch-when="Edit">
+					<button class="btn btn-primary" type="submit">Save Edits</button>
+				</div>
+			</ng-switch>
+			
 		</form>
 	</div>
 	<div class="new-post-preview col-md-4">

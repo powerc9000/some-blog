@@ -55,6 +55,33 @@ module.exports = function(config){
 			return q.promise;
 		},
 
+		editPost: function(post){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("posts");
+				c.update({"slug":post.slug}, {$set:{title:post.title, body:post.body}}, function(err, post){
+					q.resolve();
+				});
+			});
+
+			return q.promise;
+		},
+
+		deletePost: function(slug){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("posts");
+				c.remove({slug:slug}, function(err, post){
+					if(!err){
+						q.resolve();
+					}else{
+						q.reject(err);
+					}
+				})
+			});
+			return q.promise;
+		},
+
 		getAllPosts: function(start, amt){
 			var q = Q.defer();
 			amt = amt || 10;
