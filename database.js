@@ -82,6 +82,22 @@ module.exports = function(config){
 			return q.promise;
 		},
 
+		checkAuth: function(username, password){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("users");
+
+				c.findOne({username:username}, function(err, post){
+					if(post){
+						q.resolve(post);
+					}else{
+						q.reject({"error":"Username or password is incorrect"});
+					}
+				});
+			})
+			return q.promise;
+		},
+
 		getAllPosts: function(start, amt){
 			var q = Q.defer();
 			amt = amt || 10;

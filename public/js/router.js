@@ -3,9 +3,10 @@ var router = angular.module("router", ["ngRoute"]);
 router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
 	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
-	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html"})
-	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html"})
+	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:{auth:auth}})
+	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:{auth:auth}})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
+	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.otherwise({"redirectTo":"/"})
 });
 
@@ -21,6 +22,20 @@ function mainCtrl($scope, $http, setTitle){
 	$http.get("/api/posts").success(function(posts){
 		$scope.posts = posts;
 	});
+
+}
+
+function auth($http, $q, $location){
+	var q = $q.defer();
+	if(!auth){
+		$location.replace();
+		$location.path("/")
+	}
+	q.resolve();
+	return q.promise;
+}
+
+function loginCtrl(){
 
 }
 
@@ -70,7 +85,8 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 	}
 }
 
-function createCtrl($scope, $http, $location, setTitle){
+function createCtrl($scope, $http, $location, setTitle, auth){
+	console.log(arguments);
 	$scope.action = "Create"
 	setTitle("Create Post");
 	$scope.newPost = function(){
