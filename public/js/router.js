@@ -3,10 +3,11 @@ var router = angular.module("router", ["ngRoute"]);
 router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
 	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
-	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:{auth:auth}})
-	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:{auth:auth}})
+	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:auth})
+	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:auth})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
+	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
 	.otherwise({"redirectTo":"/"})
 });
 
@@ -25,18 +26,46 @@ function mainCtrl($scope, $http, setTitle){
 
 }
 
-function auth($http, $q, $location){
+function auth($rootScope, $http, $q, $location){
 	var q = $q.defer();
-	if(!auth){
+	if(!$rootScope.auth){
 		$location.replace();
 		$location.path("/")
 	}
+	console.log("here")
 	q.resolve();
 	return q.promise;
 }
 
-function loginCtrl(){
+function logoutCtrl($scope, $rootScope, $http, $location){
+	$http.post("/api/logout").success(function(){
+		$rootScope.auth = false;
+		window.auth = false;
+		$location.path("/login");
+		alertify.success("Logged out Successfully");
+	})
+}
 
+function loginCtrl($scope, $http, $rootScope, setTitle, $location){
+	setTitle("Some Blog | Login")
+	if($rootScope.auth){
+		$location.replace();
+		$location.path("/");
+		alertify.log("You are already logged in");
+		return;
+	}
+	$scope.auth = function(){
+		$http.post("/api/login", {username:$scope.username, password:$scope.password}).success(function(){
+			$rootScope.auth = true;
+			window.auth = true;
+			alertify.success("Logged in successfully");
+			$location.replace();
+			$location.path("/");
+		}).error(function(){
+			alertify.error("Username or password was incorrect try again");
+			$scope.pasword = "";
+		})
+	}
 }
 
 function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
@@ -85,8 +114,7 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 	}
 }
 
-function createCtrl($scope, $http, $location, setTitle, auth){
-	console.log(arguments);
+function createCtrl($scope, $http, $location, setTitle){
 	$scope.action = "Create"
 	setTitle("Create Post");
 	$scope.newPost = function(){

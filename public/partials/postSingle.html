@@ -1,6 +1,8 @@
 <div class="row">
 	<div class="post col-md-10">
+
 		<div class="post-title">
+			<div class="post-date pull-right">{{post.date | date}}</div>
 			<h1>{{post.title}}</h1>
 			<hr>
 		</div>
@@ -8,9 +10,13 @@
 			<div markdown="post.body"></div>
 		</div>
 	</div>
-	<div class="controlls col-md-2">
-		<a ng-href="/edit/{{post.slug}}" class="btn btn-warning">Edit</a>
-		<a ng-href="#" ng-click="deletePost()" class="btn btn-danger">Delete</a>
+	<div class="sidebar col-md-2" >
+		<div class="row controlls" ng-show="auth">
+			<a ng-href="/edit/{{post.slug}}" class="btn btn-warning">Edit</a>
+			<a ng-href="#" ng-click="deletePost()" class="btn btn-danger">Delete</a>
+		</div>
+		<div class="row">
+		</div>
 	</div>
 </div>
 

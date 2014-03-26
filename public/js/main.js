@@ -2,7 +2,9 @@ var app = angular.module("main", ["router"]).config(['$httpProvider', function($
     $httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';    
 }
-]);
+]).run(function($rootScope){
+	$rootScope.auth = window.auth;
+});
 
 app.directive("markdown", function($timeout){
 	return function(scope, el, attr){
@@ -22,4 +24,19 @@ app.directive("markdown", function($timeout){
 		}
 	};
 	
+});
+
+app.directive("activeLink", function($location){
+
+	return function(scope, el, attr){
+		scope.$on("$routeChangeSuccess", function(){
+			console.log(attr);
+			if($location.path() === attr["activeLink"]){
+				el[0].classList.add("active");
+			}else{
+				el[0].classList.remove("active");
+			}
+		})
+		
+	}
 });
