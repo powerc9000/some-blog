@@ -1,13 +1,12 @@
 var router = angular.module("router", ["ngRoute"]);
-
 router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
 	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
-	.when("/admin", {controller:adminCtrl, templateUrl:"/partials/admin.html", resolve:auth})
-	.when("/admin/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:auth})
-	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:auth})
-	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html", resolve:auth})
-	.when("/admin/draft/:slug", {controller:draftSingleCtrl, templateUrl:"/partials/draft-single.html", resolve:auth})
+	.when("/admin", {controller:adminCtrl, templateUrl:"/partials/admin.html", resolve:adminCtrl.resolve})
+	.when("/admin/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
+	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
+	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html", resolve:adminCtrl.resolve})
+	.when("/admin/draft/:slug", {controller:draftSingleCtrl, templateUrl:"/partials/draft-single.html", resolve:adminCtrl.resolve})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
@@ -20,7 +19,6 @@ router.factory("setTitle", function($rootScope){
 	};
 });
 
-
 function mainCtrl($scope, $http, setTitle){
 	setTitle("Some Blog");
 	$http.get("/api/posts").success(function(posts){
@@ -29,7 +27,8 @@ function mainCtrl($scope, $http, setTitle){
 
 }
 
-function auth($rootScope, $http, $q, $location){
+function auth($rootScope, $q, $location){
+	console.log("Am I being ran?")
 	var q = $q.defer();
 	if(!$rootScope.auth){
 		$location.replace();
@@ -127,6 +126,10 @@ function draftSingleCtrl($scope, $http, $location, setTitle){
 
 function adminCtrl($scope, $http, $location, setTitle){
 	setTitle("Admin | Some Blog");
+} 
+
+adminCtrl.resolve = {
+	auth:auth
 }
 function createCtrl($scope, $http, $location, setTitle){
 	$scope.action = "Create"
