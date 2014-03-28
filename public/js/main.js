@@ -30,7 +30,6 @@ app.directive("activeLink", function($location){
 
 	return function(scope, el, attr){
 		scope.$on("$routeChangeSuccess", function(){
-			console.log(attr);
 			if($location.path() === attr["activeLink"]){
 				el[0].classList.add("active");
 			}else{

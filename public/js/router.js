@@ -3,8 +3,10 @@ var router = angular.module("router", ["ngRoute"]);
 router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
 	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
-	.when("/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:auth})
-	.when("/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:auth})
+	.when("/admin/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:auth})
+	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:auth})
+	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html"})
+	.when("/admin/draft/:slug", {controller:draftSingleCtrl, templateUrl:"/partials/draft-single.html"})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
@@ -114,6 +116,15 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 	}
 }
 
+function draftCtrl($scope, $http, $location, setTitle){
+
+}
+
+function draftSingleCtrl($scope, $http, $location, setTitle){
+	
+}
+
+
 function createCtrl($scope, $http, $location, setTitle){
 	$scope.action = "Create"
 	setTitle("Create Post");
@@ -125,4 +136,15 @@ function createCtrl($scope, $http, $location, setTitle){
 			alert("Not okay");
 		});
 	};
+
+	$scope.cancel = function(e){
+		alertify.confirm("Do you really want to cancel? All your progress will be lost.", function(res){
+			if(res){
+				$scope.$apply(function(){
+					$location.path("/");
+				})
+				
+			}
+		});
+	}
 }

@@ -17,8 +17,8 @@
 			<ng-switch on="action">
 				<div ng-switch-when="Create">
 					<button class="btn btn-primary" type="submit">Publish</button>
-					<button class="btn btn-info" ng-click="draft()">Save as draft</button>
-					<button class="btn btn-danger" ng-click="cancel()">Cancel</button>
+					<a ng-href="#" class="btn btn-info" ng-click="draft()">Save as draft</a>
+					<a ng-href="#" class="btn btn-danger" ng-click="cancel()">Cancel</a>
 				</div>
 				<div ng-switch-when="Edit">
 					<button class="btn btn-primary" type="submit">Save Edits</button>
