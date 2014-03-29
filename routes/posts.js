@@ -2,15 +2,37 @@ module.exports = function(db){
 	return{
 		newPost: function(req, res){
 			var post = req.body;
+			var draft = req.body.isdraft;
+			var draftId = req.body.draftid;
 			if(post.title.length && post.body.length){
 				post.date = Date.now();
 				db.newPost(post).then(function(post){
-					console.log(arguments);
+					if(draft){
+						db.deleteDraft(draftId);
+					}
 					res.send({postId:post._id, slug:post.slug});
 				});
 			}else{
 				res.send({"error": "Post title and post body cannot be empty"}, 403);
 			}
+		},
+
+		getDrafts: function(req, res){
+			var start = req.query.start || 0;
+			var amount = req.query.amt || 10;
+			db.getDrafts(start, amount).then(function(drafts){
+				res.send(drafts);
+			}, function(){
+				res.send(500);
+			})
+		},
+
+		newDraft: function(req, res){
+			var post = req.body;
+			post.date = Date.now();
+			db.newDraft(post).then(function(){
+				res.send();
+			})
 		},
 
 		getPost:function(req, res){
@@ -20,7 +42,13 @@ module.exports = function(db){
 				res.send(404);
 			});
 		},
-
+		getDraft: function(req, res){
+			db.getDraft(req.params.id).then(function(draft){
+				res.send(draft);
+			}, function(){
+				res.send(404);
+			})
+		},
 		edit: function(req, res){
 			var post = req.body
 			if(!post.title.length || !post.body.length){

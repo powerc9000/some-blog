@@ -2,6 +2,7 @@
 
 	<h1 ng-switch-when="Edit">Edit post</h1>
 	<h1 ng-switch-when="Create">Create a new Post</h1>
+	<h1 ng-switch-when="draft">Edit Draft</h1>
 </div>
 <div class="row-fluid">
 	<div class="create-form col-md-8">
@@ -22,6 +23,11 @@
 				</div>
 				<div ng-switch-when="Edit">
 					<button class="btn btn-primary" type="submit">Save Edits</button>
+				</div>
+				<div ng-switch-when="draft">
+					<button class="btn btn-primary" type="submit">Publish</button>
+					<a href="#" class="btn" ng-click="saveDraft()">Save</a>
+					<a href="#" class="btn btn-danger" ng-click="delete()">Delete</a>
 				</div>
 			</ng-switch>
 			

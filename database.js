@@ -1,11 +1,14 @@
 var Q = require("q");
+
 module.exports = function(config){
+	"use strict";
 	config = config || {
 		path:"127.0.0.1:27017",
 		db: "blog"
 	};
 	var Client = require('mongodb').MongoClient,
 		Server = require('mongodb').Server,
+		objId = require("mongodb").ObjectID,
 		promise = Q.defer(),
 		db = promise.promise;
 		Client.connect("mongodb://"+config.path+"/"+config.db, function(err, con){
@@ -37,7 +40,61 @@ module.exports = function(config){
 			});
 			return q.promise;
 		},
+		deleteDraft: function(id){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("drafts");
+				c.remove({_id:objId(id)}, function(err, post){
+					if(!err){
+						q.resolve();
+					}else{
+						q.reject(err);
+					}
+				})
+			});
+			return q.promise;
+		},
 
+		getDrafts: function(start, amt){
+			var q = Q.defer();
+			amt = amt || 10;
+			db.then(function(client){
+				var c = client.collection("drafts");
+
+				c.find().sort({_id:-1}).skip(start).limit(10).toArray(function(err, posts){
+					q.resolve(posts);
+				});
+			});
+
+			return q.promise;
+		},
+
+		newDraft: function(post){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("drafts");
+				c.insert(post, function(err, records){
+					q.resolve(records[0]);
+				});
+			});
+			return q.promise;
+		},
+		getDraft: function(id){
+			var q = Q.defer();
+			db.then(function(client){
+				console.log(objId(id))
+				var c = client.collection("drafts");
+				c.findOne({_id:objId(id)}, function(err, draft){
+					console.log("found")
+					if(!draft || err){
+						q.reject();
+					}else{
+						q.resolve(draft);
+					}
+				})
+			})
+			return q.promise;
+		},
 		getPost: function(slug){
 			var q = Q.defer();
 

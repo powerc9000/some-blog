@@ -6,7 +6,7 @@ router.config(function($routeProvider, $locationProvider){
 	.when("/admin/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html", resolve:adminCtrl.resolve})
-	.when("/admin/draft/:slug", {controller:draftSingleCtrl, templateUrl:"/partials/draft-single.html", resolve:adminCtrl.resolve})
+	.when("/admin/draft/:id", {controller:draftSingleCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
@@ -117,11 +117,40 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 }
 
 function draftCtrl($scope, $http, $location, setTitle){
-
+	$scope.drafts = [];
+	$http.get("/api/drafts").success(function(data){
+		$scope.drafts = data;
+	});
 }
 
-function draftSingleCtrl($scope, $http, $location, setTitle){
-
+function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
+	$scope.action = "draft";
+	setTitle("Edit draft")
+	$http.get("/api/draft/"+$routeParams.id).success(function(data){
+		console.log(data);
+		$scope.draft = data;
+		$scope.newPostTitle = data.title;
+		$scope.newPostBody = data.body;
+	});
+	$scope.newPost = function(){
+		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope._id}).success(function(data){
+			$location.path("/post/"+data.slug);
+			//alert("Okay");
+		}).error(function(){
+			alert("Not okay");
+		});
+	}
+	$scope.saveDraft = function(){
+		$http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
+			
+			$http.post("/api/deleteDraft", {id:data._id}).success(function(){
+				$location.path("/admin");
+				alertify.success("Draft saved!");
+			})
+		}).error(function(){
+			alertify.error("oops something went wrong please try again!");
+		})
+	}
 }
 
 function adminCtrl($scope, $http, $location, setTitle){
@@ -142,7 +171,14 @@ function createCtrl($scope, $http, $location, setTitle){
 			alert("Not okay");
 		});
 	};
-
+	$scope.draft = function(){
+		$http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
+			$location.path("/admin");
+			alertify.success("Draft saved!")
+		}).error(function(){
+			alertify.error("oops something went wrong please try again!");
+		})
+	};
 	$scope.cancel = function(e){
 		alertify.confirm("Do you really want to cancel? All your progress will be lost.", function(res){
 			if(res){
