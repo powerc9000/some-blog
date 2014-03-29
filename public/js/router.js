@@ -28,13 +28,12 @@ function mainCtrl($scope, $http, setTitle){
 }
 
 function auth($rootScope, $q, $location){
-	console.log("Am I being ran?")
 	var q = $q.defer();
 	if(!$rootScope.auth){
 		$location.replace();
 		$location.path("/")
 	}
-	console.log("here")
+
 	q.resolve();
 	return q.promise;
 }
@@ -90,7 +89,6 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 
 function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 	$http.get("/api/post/"+$routeParams.slug).success(function(data){
-		console.log(data);
 		$scope.post = data;
 		setTitle(data.title);
 	}).error(function(){
@@ -127,13 +125,12 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 	$scope.action = "draft";
 	setTitle("Edit draft")
 	$http.get("/api/draft/"+$routeParams.id).success(function(data){
-		console.log(data);
 		$scope.draft = data;
 		$scope.newPostTitle = data.title;
 		$scope.newPostBody = data.body;
 	});
 	$scope.newPost = function(){
-		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope._id}).success(function(data){
+		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope.draft._id}).success(function(data){
 			$location.path("/post/"+data.slug);
 			//alert("Okay");
 		}).error(function(){
@@ -142,9 +139,9 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 	}
 	$scope.saveDraft = function(){
 		$http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
-			
-			$http.post("/api/deleteDraft", {id:data._id}).success(function(){
-				$location.path("/admin");
+			$http.post("/api/deleteDraft", {id:$scope.draft._id}).success(function(){
+				$location.replace();
+				$location.path("/admin/draft/"+data._id);
 				alertify.success("Draft saved!");
 			})
 		}).error(function(){

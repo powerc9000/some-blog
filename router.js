@@ -18,6 +18,7 @@ module.exports = function(db){
 	this.get("/api/drafts", auth.checkAuth, posts.getDrafts);
 	this.post("/api/newdraft", auth.checkAuth, posts.newDraft);
 	this.get("/api/draft/:id", auth.checkAuth, posts.getDraft);
+	this.post("/api/deleteDraft", auth.checkAuth, posts.deleteDraft);
 
 	//Public routes
 	this.get("/api/post/:slug", posts.getPost);

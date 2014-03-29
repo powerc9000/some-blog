@@ -82,10 +82,8 @@ module.exports = function(config){
 		getDraft: function(id){
 			var q = Q.defer();
 			db.then(function(client){
-				console.log(objId(id))
 				var c = client.collection("drafts");
 				c.findOne({_id:objId(id)}, function(err, draft){
-					console.log("found")
 					if(!draft || err){
 						q.reject();
 					}else{

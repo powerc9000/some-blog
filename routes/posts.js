@@ -30,8 +30,17 @@ module.exports = function(db){
 		newDraft: function(req, res){
 			var post = req.body;
 			post.date = Date.now();
-			db.newDraft(post).then(function(){
-				res.send();
+			db.newDraft(post).then(function(draft){
+				res.send(draft);
+			})
+		},
+
+		deleteDraft: function(req, res){
+			var id = req.body.id;
+			db.deleteDraft(id).then(function(){
+				res.send(200);
+			}, function(){
+				res.send(500);
 			})
 		},
 
