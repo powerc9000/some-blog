@@ -3,9 +3,16 @@ var app = angular.module("main", ["router"]).config(['$httpProvider', function($
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';    
 }
 ]).run(function($rootScope){
+	$rootScope.root_page_title = "Some Blog";
+	$rootScope.blog_name = "Some Blog"
 	$rootScope.auth = window.auth;
 });
 
+app.factory("setTitle", function($rootScope){
+	return function(title){
+		$rootScope.root_page_title = title + " | " + $rootScope.blog_name;
+	};
+});
 app.directive("markdown", function($timeout){
 	return function(scope, el, attr){
 		scope.$watch(attr.markdown, doMarkdownAndTex);

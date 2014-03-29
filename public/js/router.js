@@ -7,20 +7,17 @@ router.config(function($routeProvider, $locationProvider){
 	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html", resolve:adminCtrl.resolve})
 	.when("/admin/draft/:id", {controller:draftSingleCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
+	.when("/admin/blog-settings", {controller:blogSettingsCtrl, templateUrl:"/partials/blog-settings.html", resolve:adminCtrl.resolve})
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
 	.otherwise({"redirectTo":"/"})
 });
 
-router.factory("setTitle", function($rootScope){
-	return function(title){
-		$rootScope.page_title = title;
-	};
-});
+
 
 function mainCtrl($scope, $http, setTitle){
-	setTitle("Some Blog");
+	setTitle("Home");
 	$http.get("/api/posts").success(function(posts){
 		$scope.posts = posts;
 	});
@@ -36,6 +33,16 @@ function auth($rootScope, $q, $location){
 
 	q.resolve();
 	return q.promise;
+}
+
+function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
+	setTitle("Blog Settings")
+	$scope.blog_name_new = $rootScope.blog_name;
+	$scope.saveBlogName = function(){
+		//$http.post("/api/change-blog-name", {name:$scope.blog_name_new}).success(function(){
+			$rootScope.blog_name = $scope.blog_name_new
+		//})
+	}
 }
 
 function logoutCtrl($scope, $rootScope, $http, $location){
@@ -151,7 +158,7 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 }
 
 function adminCtrl($scope, $http, $location, setTitle){
-	setTitle("Admin | Some Blog");
+	setTitle("Admin");
 } 
 
 adminCtrl.resolve = {
