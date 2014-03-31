@@ -2,7 +2,7 @@
 	"use strict";
 	var app = angular.module("main", ["router", "ngSanitize"]).config(['$httpProvider', function($httpProvider) {
 		$httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
-		$httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';    
+		$httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';
 	}
 	]).run(function($rootScope){
 		$rootScope.root_page_title = "Some Blog";
@@ -53,7 +53,36 @@
 		};
 		
 	});
+	app.directive("youtube", function($timeout){
+		return function(scope, el, attr){
+			var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+			var once = {};
+			scope.$watch(attr.youtube, function(val){
+				var a;
+				$timeout(function(){
+					a = el[0].getElementsByTagName("a");
+					if(a.length){
+						[].forEach.call(a, function(l){
+							var match = l.href.match(regex);
+							if(match && !once[match[1]]){
+								var frame = document.createElement("iframe");
+								var frameContain = document.createElement("div");
+								once[match[1]] = true;
+								frame.width = 420;
+								frame.height = 345;
+								frame.src = 'http://www.youtube.com/embed/' + match[1];
+								frameContain.appendChild(frame);
+								l.parentNode.insertBefore(frameContain, l);
 
+								//l.hidden = true;
+							}
+						});
+					}
+				},0);
+				
+			});
+		};
+	});
 	app.directive("tex", function($timeout){
 		return function(scope, el, attr){
 			scope.$watch(attr.tex, function(val){
