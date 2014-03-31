@@ -54,9 +54,10 @@
 		
 	});
 	app.directive("youtube", function($timeout){
-		return function(scope, el, attr){
+		return function postLink(scope, el, attr){
 			var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
 			var once = {};
+
 			scope.$watch(attr.youtube, function(val){
 				var a;
 				$timeout(function(){
@@ -64,12 +65,13 @@
 					if(a.length){
 						[].forEach.call(a, function(l){
 							var match = l.href.match(regex);
+							var ratio = 0.5625;
 							if(match && !once[match[1]]){
 								var frame = document.createElement("iframe");
 								var frameContain = document.createElement("div");
 								once[match[1]] = true;
-								frame.width = 420;
-								frame.height = 345;
+								frame.width = el[0].offsetWidth/1.50;
+								frame.height = frame.width * ratio;
 								frame.src = 'http://www.youtube.com/embed/' + match[1];
 								frameContain.appendChild(frame);
 								l.parentNode.insertBefore(frameContain, l);
