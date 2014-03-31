@@ -50,7 +50,7 @@ module.exports = function(config){
 					}else{
 						q.reject(err);
 					}
-				})
+				});
 			});
 			return q.promise;
 		},
@@ -89,8 +89,8 @@ module.exports = function(config){
 					}else{
 						q.resolve(draft);
 					}
-				})
-			})
+				});
+			});
 			return q.promise;
 		},
 		getPost: function(slug){
@@ -132,7 +132,7 @@ module.exports = function(config){
 					}else{
 						q.reject(err);
 					}
-				})
+				});
 			});
 			return q.promise;
 		},
@@ -149,7 +149,7 @@ module.exports = function(config){
 						q.reject({"error":"Username or password is incorrect"});
 					}
 				});
-			})
+			});
 			return q.promise;
 		},
 
