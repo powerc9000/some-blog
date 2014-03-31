@@ -1,4 +1,32 @@
 module.exports = function(db){
+	"use strict";
+	var md = require("markdown").markdown;
+	function doMarkdown(val){
+		var words;
+		var lines;
+		//Finds links
+		var linkRegex = /(?:ftp|http|https):\/\/(?:[\w\.\-\+]+:{0,1}[\w\.\-\+]*@)?(?:[a-z0-9\-\.]+)(?::[0-9]+)?(?:\/|\/(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+)|\?(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+))?$/ig;
+		if(val){
+
+			//Split the entire Markdown string into lines then words
+			lines = val.split("\n");
+			lines.forEach(function(l, i){
+				words = l.split(" ");
+				words.forEach(function(w, i){
+					w.replace(linkRegex, function(match, idx, word){
+						words[i] = "["+word+"]"+"("+match+")";
+					});
+				});
+				lines[i] = words.join(" ");
+			});
+			
+			val = lines.join("\n");
+			return md.toHTML(val);
+		}
+		else{
+			return "";
+		}
+	}
 	return{
 		newPost: function(req, res){
 			var post = req.body;
@@ -6,6 +34,9 @@ module.exports = function(db){
 			var draftId = req.body.draftid;
 			if(post.title.length && post.body.length){
 				post.date = Date.now();
+				post.markdown = post.body;
+				post.body = doMarkdown(post.body);
+
 				db.newPost(post).then(function(post){
 					if(draft){
 						db.deleteDraft(draftId);
@@ -24,7 +55,7 @@ module.exports = function(db){
 				res.send(drafts);
 			}, function(){
 				res.send(500);
-			})
+			});
 		},
 
 		newDraft: function(req, res){
@@ -32,7 +63,7 @@ module.exports = function(db){
 			post.date = Date.now();
 			db.newDraft(post).then(function(draft){
 				res.send(draft);
-			})
+			});
 		},
 
 		deleteDraft: function(req, res){
@@ -41,7 +72,7 @@ module.exports = function(db){
 				res.send(200);
 			}, function(){
 				res.send(500);
-			})
+			});
 		},
 
 		getPost:function(req, res){
@@ -56,19 +87,22 @@ module.exports = function(db){
 				res.send(draft);
 			}, function(){
 				res.send(404);
-			})
+			});
 		},
 		edit: function(req, res){
-			var post = req.body
+			var post = req.body;
 			if(!post.title.length || !post.body.length){
 				req.send({"error":"Post must have a body and a title"}, 403);
 				return;
 			}
+			console.log(post.body);
+			post.markdown = post.body;
+			post.body = doMarkdown(post.body);
 			db.editPost(post).then(function(){
 				res.send(200);
 			}, function(err){
 				res.send(err, 403);
-			})
+			});
 		},
 
 		deletePost: function(req, res){
@@ -77,7 +111,7 @@ module.exports = function(db){
 				res.send(200);
 			}, function(err){
 				res.send(err, 403);
-			})
+			});
 		},
 
 		getAll: function(req, res){

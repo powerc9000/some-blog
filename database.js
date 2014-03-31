@@ -114,7 +114,7 @@ module.exports = function(config){
 			var q = Q.defer();
 			db.then(function(client){
 				var c = client.collection("posts");
-				c.update({"slug":post.slug}, {$set:{title:post.title, body:post.body}}, function(err, post){
+				c.update({"slug":post.slug}, {$set:{title:post.title, body:post.body, markdown:post.markdown}}, function(err, post){
 					q.resolve();
 				});
 			});

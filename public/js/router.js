@@ -11,7 +11,7 @@ router.config(function($routeProvider, $locationProvider){
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
-	.otherwise({"redirectTo":"/"})
+	.otherwise({"redirectTo":"/"});
 });
 
 
@@ -28,7 +28,7 @@ function auth($rootScope, $q, $location){
 	var q = $q.defer();
 	if(!$rootScope.auth){
 		$location.replace();
-		$location.path("/")
+		$location.path("/");
 	}
 
 	q.resolve();
@@ -36,13 +36,13 @@ function auth($rootScope, $q, $location){
 }
 
 function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
-	setTitle("Blog Settings")
+	setTitle("Blog Settings");
 	$scope.blog_name_new = $rootScope.blog_name;
 	$scope.saveBlogName = function(){
 		//$http.post("/api/change-blog-name", {name:$scope.blog_name_new}).success(function(){
-			$rootScope.blog_name = $scope.blog_name_new
+			$rootScope.blog_name = $scope.blog_name_new;
 		//})
-	}
+	};
 }
 
 function logoutCtrl($scope, $rootScope, $http, $location){
@@ -51,11 +51,11 @@ function logoutCtrl($scope, $rootScope, $http, $location){
 		window.auth = false;
 		$location.path("/login");
 		alertify.success("Logged out Successfully");
-	})
+	});
 }
 
 function loginCtrl($scope, $http, $rootScope, setTitle, $location){
-	setTitle("Some Blog | Login")
+	setTitle("Some Blog | Login");
 	if($rootScope.auth){
 		$location.replace();
 		$location.path("/");
@@ -72,15 +72,15 @@ function loginCtrl($scope, $http, $rootScope, setTitle, $location){
 		}).error(function(){
 			alertify.error("Username or password was incorrect try again");
 			$scope.pasword = "";
-		})
-	}
+		});
+	};
 }
 
 function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 	$scope.action = "Edit";
 	$http.get("/api/post/"+$routeParams.slug).success(function(data){
 		$scope.newPostTitle = data.title;
-		$scope.newPostBody = data.body;
+		$scope.newPostBody = data.markdown;
 		$scope.post = data;
 		setTitle(data.title);
 	});
@@ -91,7 +91,7 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 		}).error(function(){
 			alert("Not okay");
 		});
-	}
+	};
 }
 
 function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
@@ -111,14 +111,14 @@ function postSingleCtrl($scope, $http, $routeParams, $location, setTitle){
 				$location.path("/");
 			}).error(function(data){
 				console.log(data);
-			})
+			});
 		}
 		alertify.confirm("Are you sure you want to delete this post", function(e){
 			if(e){
 				doDelete();
 			}
-		})
-	}
+		});
+	};
 }
 
 function draftCtrl($scope, $http, $location, setTitle){
@@ -130,7 +130,7 @@ function draftCtrl($scope, $http, $location, setTitle){
 
 function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 	$scope.action = "draft";
-	setTitle("Edit draft")
+	setTitle("Edit draft");
 	$http.get("/api/draft/"+$routeParams.id).success(function(data){
 		$scope.draft = data;
 		$scope.newPostTitle = data.title;
@@ -143,18 +143,18 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 		}).error(function(){
 			alert("Not okay");
 		});
-	}
+	};
 	$scope.saveDraft = function(){
 		$http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
 			$http.post("/api/deleteDraft", {id:$scope.draft._id}).success(function(){
 				$location.replace();
 				$location.path("/admin/draft/"+data._id);
 				alertify.success("Draft saved!");
-			})
+			});
 		}).error(function(){
 			alertify.error("oops something went wrong please try again!");
-		})
-	}
+		});
+	};
 }
 
 function adminCtrl($scope, $http, $location, setTitle){
@@ -163,9 +163,9 @@ function adminCtrl($scope, $http, $location, setTitle){
 
 adminCtrl.resolve = {
 	auth:auth
-}
+};
 function createCtrl($scope, $http, $location, setTitle){
-	$scope.action = "Create"
+	$scope.action = "Create";
 	setTitle("Create Post");
 	$scope.newPost = function(){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
@@ -178,19 +178,19 @@ function createCtrl($scope, $http, $location, setTitle){
 	$scope.draft = function(){
 		$http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
 			$location.path("/admin");
-			alertify.success("Draft saved!")
+			alertify.success("Draft saved!");
 		}).error(function(){
 			alertify.error("oops something went wrong please try again!");
-		})
+		});
 	};
 	$scope.cancel = function(e){
 		alertify.confirm("Do you really want to cancel? All your progress will be lost.", function(res){
 			if(res){
 				$scope.$apply(function(){
 					$location.path("/");
-				})
+				});
 				
 			}
 		});
-	}
+	};
 }
