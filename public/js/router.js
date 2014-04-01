@@ -41,6 +41,7 @@ function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
 	$scope.saveBlogName = function(){
 		//$http.post("/api/change-blog-name", {name:$scope.blog_name_new}).success(function(){
 			$rootScope.blog_name = $scope.blog_name_new;
+			setTitle("Blog Settings");
 		//})
 	};
 }
@@ -172,7 +173,6 @@ function createCtrl($scope, $http, $location, setTitle){
 			$location.path("/post/"+data.slug);
 			//alert("Okay");
 		}).error(function(data){
-			console.log(data);
 			alertify.error(data.error);
 		});
 	};
