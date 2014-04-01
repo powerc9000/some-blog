@@ -88,8 +88,8 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug}).success(function(data){
 			$location.path("/post/"+$scope.post.slug);
 			//alert("Okay");
-		}).error(function(){
-			alert("Not okay");
+		}).error(function(data){
+			alertify.alert(data.error);
 		});
 	};
 }
@@ -171,8 +171,9 @@ function createCtrl($scope, $http, $location, setTitle){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
 			$location.path("/post/"+data.slug);
 			//alert("Okay");
-		}).error(function(){
-			alert("Not okay");
+		}).error(function(data){
+			console.log(data);
+			alertify.error(data.error);
 		});
 	};
 	$scope.draft = function(){

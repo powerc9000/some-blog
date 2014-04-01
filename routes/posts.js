@@ -32,6 +32,8 @@ module.exports = function(db){
 			var post = req.body;
 			var draft = req.body.isdraft;
 			var draftId = req.body.draftid;
+			post.title = post.title || "";
+			post.body = post.body || "";
 			if(post.title.length && post.body.length){
 				post.date = Date.now();
 				post.markdown = post.body;
