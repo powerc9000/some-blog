@@ -19,9 +19,15 @@ router.config(function($routeProvider, $locationProvider){
 
 function mainCtrl($scope, $http, setTitle){
 	setTitle("Home");
-	$http.get("/api/posts").success(function(posts){
-		$scope.posts = posts;
+	$scope.count = 0;
+	$http.get("/api/posts").success(function(data){
+		$scope.posts = data.posts;
+		$scope.count = data.count;
 	});
+	$scope.totalPages = function(){
+		console.log($scope.count);
+		return new Array(Math.ceil($scope.count/10));
+	};
 
 }
 

@@ -177,8 +177,11 @@ module.exports = function(config){
 			db.then(function(client){
 				var c = client.collection("posts");
 
-				c.find().sort({_id:-1}).skip(start).limit(10).toArray(function(err, posts){
-					q.resolve(posts);
+				c.find().sort({_id:-1}).skip(start).limit(amt).toArray(function(err, posts){
+					c.count(function(err, total){
+						q.resolve({posts:posts, count:total});
+					});
+					
 				});
 			});
 
