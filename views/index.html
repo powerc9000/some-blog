@@ -12,7 +12,9 @@
 		<script src="/js/router.js"></script>
 		<script src="/js/main.js"></script>
 		<script>
-			window.auth = <%=auth%>
+			//I dont have to do this but jshint was being annoying so I did.
+			//The server just loads in if we are logged in or not so that angular doesnt have to make a request.
+			window.auth = ("<%=auth%>" === "true");
 		</script>
 	</head>
 	<body>
