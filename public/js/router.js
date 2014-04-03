@@ -17,17 +17,28 @@ router.config(function($routeProvider, $locationProvider){
 
 
 
-function mainCtrl($scope, $http, setTitle){
+function mainCtrl($scope, $http, setTitle, $location){
+	var page = $location.search().page || 1;
+	$scope.page = page;
 	setTitle("Home");
 	$scope.count = 0;
-	$http.get("/api/posts").success(function(data){
+	$scope.nextPage = true;
+	$scope.nextPrev = function(next){
+		if(next){
+			return (+page)+1;
+		}else{
+			return (+page)-1;
+		}
+		
+	};
+	$http.get("/api/posts?page="+page).success(function(data){
 		$scope.posts = data.posts;
 		$scope.count = data.count;
+		if((page - 1) * 10 + 10 >= $scope.count){
+			$scope.nextPage = false;
+		}
 	});
-	$scope.totalPages = function(){
-		console.log($scope.count);
-		return new Array(Math.ceil($scope.count/10));
-	};
+
 
 }
 

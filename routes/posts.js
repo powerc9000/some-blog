@@ -144,8 +144,10 @@ module.exports = function(db){
 		},
 
 		getAll: function(req, res){
-			var start = req.query.start || 0;
-			var amt = req.query.amt || 10;
+			var page = req.query.page;
+			var start; 
+			var amt = 10;
+			start = (page - 1) * 10;
 			db.getAllPosts(start, amt).then(function(posts){
 				res.send(posts);
 			});
