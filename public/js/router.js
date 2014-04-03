@@ -11,6 +11,7 @@ router.config(function($routeProvider, $locationProvider){
 	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
 	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
 	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
+	.when("/tag/:tag", {controller:tagCtrl, templateUrl:"/partials/tags.html"})
 	.otherwise({"redirectTo":"/"});
 });
 
@@ -22,6 +23,14 @@ function mainCtrl($scope, $http, setTitle){
 		$scope.posts = posts;
 	});
 
+}
+
+function tagCtrl($scope, $http, setTitle, $routeParams){
+	setTitle($routeParams.tag);
+	$http.get("/api/tag/"+$routeParams.tag).success(function(posts){
+		$scope.posts = posts;
+		$scope.tag = $routeParams.tag;
+	});
 }
 
 function auth($rootScope, $q, $location){
@@ -82,11 +91,12 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 	$http.get("/api/post/"+$routeParams.slug).success(function(data){
 		$scope.newPostTitle = data.title;
 		$scope.newPostBody = data.markdown;
+		$scope.tags = data.tags.join(", ");
 		$scope.post = data;
 		setTitle(data.title);
 	});
 	$scope.newPost = function(){
-		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug}).success(function(data){
+		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug, tags:$scope.tags}).success(function(data){
 			$location.path("/post/"+$scope.post.slug);
 			//alert("Okay");
 		}).error(function(data){
@@ -169,7 +179,7 @@ function createCtrl($scope, $http, $location, setTitle){
 	$scope.action = "Create";
 	setTitle("Create Post");
 	$scope.newPost = function(){
-		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
+		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){
 			$location.path("/post/"+data.slug);
 			//alert("Okay");
 		}).error(function(data){

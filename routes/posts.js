@@ -27,13 +27,24 @@ module.exports = function(db){
 			return "";
 		}
 	}
+	function tagsToArray(tagString){
+		if(tagString){
+			tagString = tagString.split(",");
+			tagString.forEach(function(t, i){
+				tagString[i] = t.trim();
+			});
+			return tagString;
+		}
+		return [];
+	}
 	return{
 		newPost: function(req, res){
-			var post = req.body;
-			var draft = req.body.isdraft;
-			var draftId = req.body.draftid;
-			post.title = post.title || "";
-			post.body = post.body || "";
+			var post = {};
+			var drafId = req.body.draftId;
+			var draft = req.body.isDraft;
+			post.title = req.body.title || "";
+			post.body = req.body.body || "";
+			post.tags = tagsToArray(req.body.tags);
 			if(post.title.length && post.body.length){
 				post.date = Date.now();
 				post.markdown = post.body;
@@ -48,6 +59,7 @@ module.exports = function(db){
 			}else{
 				res.send({"error": "Post title and post body cannot be empty"}, 403);
 			}
+
 		},
 
 		getDrafts: function(req, res){
@@ -92,12 +104,16 @@ module.exports = function(db){
 			});
 		},
 		edit: function(req, res){
-			var post = req.body;
+			var post = {
+				body: req.body.body,
+				title: req.body.title,
+				slug: req.body.slug,
+				tags: tagsToArray(req.body.tags)
+			};
 			if(!post.title.length || !post.body.length){
 				req.send({"error":"Post must have a body and a title"}, 403);
 				return;
 			}
-			console.log(post.body);
 			post.markdown = post.body;
 			post.body = doMarkdown(post.body);
 			db.editPost(post).then(function(){
@@ -105,6 +121,17 @@ module.exports = function(db){
 			}, function(err){
 				res.send(err, 403);
 			});
+		},
+
+		getByTag: function(req, res){
+			var tag = req.params.tag;
+			if(!tag){
+				res.send([]);
+			}else{
+				db.getPostsByTag(tag, 0, 10).then(function(posts){
+					res.send(posts);
+				});
+			}
 		},
 
 		deletePost: function(req, res){

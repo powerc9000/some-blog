@@ -109,12 +109,30 @@ module.exports = function(config){
 			});
 			return q.promise;
 		},
+		getPostsByTag: function(tag, start, amt){
+			var q = Q.defer();
+			db.then(function(client){
+				var c = client.collection("posts");
+
+				c.find({tags:tag}).sort({_id:-1}).skip(start).limit(amt).toArray(function(err, posts){
+					if(err){
+						console.log(err);
+						q.reject(err);
+
+					}else{
+						console.log(posts);
+						q.resolve(posts);
+					}
+				});
+			});
+			return q.promise;
+		},
 
 		editPost: function(post){
 			var q = Q.defer();
 			db.then(function(client){
 				var c = client.collection("posts");
-				c.update({"slug":post.slug}, {$set:{title:post.title, body:post.body, markdown:post.markdown}}, function(err, post){
+				c.update({"slug":post.slug}, {$set:{title:post.title, body:post.body, markdown:post.markdown, tags:post.tags}}, function(err, post){
 					q.resolve();
 				});
 			});

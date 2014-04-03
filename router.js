@@ -23,7 +23,7 @@ module.exports = function(db){
 	//Public routes
 	this.get("/api/post/:slug", posts.getPost);
 	this.get("/api/posts", posts.getAll);
-
+	this.get("/api/tag/:tag", posts.getByTag);
 	//login logout stuff
 	this.post("/api/logout", auth.logout);
 	this.get("/api/isAuth", auth.isAuth);

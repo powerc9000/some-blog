@@ -15,6 +15,13 @@
 			$rootScope.root_page_title = title + " | " + $rootScope.blog_name;
 		};
 	});
+
+	app.directive("blogPost", function(){
+		return{
+			restrict:"E",
+			templateUrl:"/partials/post.html"
+		};
+	});
 	app.directive("markdown", function($timeout){
 		return function(scope, el, attr){
 			scope.$watch(attr.markdown, doMarkdownAndTex);

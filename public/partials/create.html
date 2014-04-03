@@ -15,6 +15,12 @@
 				<label for="postBody">Post</label>
 				<textarea name="" id="postBody" rows="20" placeholder="Post body" class="form-control" ng-model="newPostBody"></textarea>
 			</div>
+			<div class="form-group">
+				<label for="postTags">Tags</label>
+				<input type="text" name="tags" id="postTags" placeholder="tags" class="form-control"  ng-model="tags">
+				<p class="help-block">seperate tags with a comma</p>
+
+			</div>
 			<ng-switch on="action">
 				<div ng-switch-when="Create">
 					<button class="btn btn-primary" type="submit">Publish</button>
