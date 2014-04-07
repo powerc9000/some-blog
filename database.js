@@ -116,11 +116,9 @@ module.exports = function(config){
 
 				c.find({tags:tag}).sort({_id:-1}).skip(start).limit(amt).toArray(function(err, posts){
 					if(err){
-						console.log(err);
 						q.reject(err);
 
 					}else{
-						console.log(posts);
 						q.resolve(posts);
 					}
 				});

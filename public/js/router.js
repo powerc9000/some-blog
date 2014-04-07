@@ -1,21 +1,26 @@
 var router = angular.module("router", ["ngRoute"]);
 router.config(function($routeProvider, $locationProvider){
 	$locationProvider.html5Mode(true);
-	$routeProvider.when("/", {controller:mainCtrl, templateUrl:"/partials/home.html"})
+	$routeProvider
+	//Public things
+	.when("/", {controller:mainCtrl, templateUrl:"/theme/partials/home.html"})
+	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/theme/partials/postSingle.html"})
+	.when("/tag/:tag", {controller:tagCtrl, templateUrl:"/theme/partials/tags.html"})
+	.when("/login", {controller:loginCtrl, templateUrl:"/theme/partials/login.html"})
+	.when("/logout", {controller:logoutCtrl, templateUrl:"/theme/partials/login.html"})
+	//Auth things
 	.when("/admin", {controller:adminCtrl, templateUrl:"/partials/admin.html", resolve:adminCtrl.resolve})
 	.when("/admin/create", {controller:createCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/edit/:slug", {controller:editPostCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/drafts", {controller:draftCtrl, templateUrl:"/partials/all-drafts.html", resolve:adminCtrl.resolve})
 	.when("/admin/draft/:id", {controller:draftSingleCtrl, templateUrl:"/partials/create.html", resolve:adminCtrl.resolve})
 	.when("/admin/blog-settings", {controller:blogSettingsCtrl, templateUrl:"/partials/blog-settings.html", resolve:adminCtrl.resolve})
-	.when("/post/:slug", {controller:postSingleCtrl, templateUrl:"/partials/postSingle.html"})
-	.when("/login", {controller:loginCtrl, templateUrl:"/partials/login.html"})
-	.when("/logout", {controller:logoutCtrl, templateUrl:"/partials/login.html"})
-	.when("/tag/:tag", {controller:tagCtrl, templateUrl:"/partials/tags.html"})
-	.otherwise({"redirectTo":"/"});
+	.otherwise({controller:_404Ctrl, templateUrl:"/partials/404.html"});
 });
 
+function _404Ctrl(){
 
+}
 
 function mainCtrl($scope, $http, setTitle, $location){
 	var page = $location.search().page || 1;
@@ -98,7 +103,7 @@ function loginCtrl($scope, $http, $rootScope, setTitle, $location){
 			$location.path("/");
 		}).error(function(){
 			alertify.error("Username or password was incorrect try again");
-			$scope.pasword = "";
+			$scope.password = "";
 		});
 	};
 }

@@ -19,7 +19,7 @@
 	app.directive("blogPost", function(){
 		return{
 			restrict:"E",
-			templateUrl:"/partials/post.html"
+			templateUrl:"/theme/partials/post.html"
 		};
 	});
 	app.directive("markdown", function($timeout){

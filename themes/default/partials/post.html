@@ -6,6 +6,7 @@
 	<div ng-bind-html="post.body" tex="post.body" youtube="post.body"></div>
 </div>
 <div class="tags" ng-show="post.tags">
-	<p>Tags: </p>
-	<a href="/tag/{{tag}}" ng-repeat="tag in post.tags">{{tag}} </a>
+	<span ng-repeat="tag in post.tags">
+		<a href="/tag/{{tag}}" class ="label label-primary tag" >{{tag}}</a> 
+	</span>
 </div>

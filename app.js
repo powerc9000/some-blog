@@ -12,6 +12,7 @@ var path = require('path');
 var ejs = require("ejs");
 var app = express();
 var db = require("./database")();
+var config = require("./config");
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
