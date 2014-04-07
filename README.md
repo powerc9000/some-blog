@@ -18,7 +18,6 @@ Simply do `node app.js` and navigate to `localhost:3000`
 ###Todo
 
 * Discourse comments
-* Tags
 * Themes
   * look up description.json for themes so they can set a name and an image for use in the settings area
 * Authors
