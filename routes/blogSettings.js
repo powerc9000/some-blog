@@ -2,6 +2,7 @@ module.exports = function(db, config){
 	var fs = require("fs");
 	var Q = require("q");
 	var path = require("path");
+	//Returns the names of all the directories in a directory
 	getDirs = function(rootDir) {
 		var q = Q.defer();
 		fs.readdir(rootDir, function(err, files) {
@@ -27,7 +28,11 @@ module.exports = function(db, config){
 		});
 		return q.promise;
 	};
+
 	return{
+		//Finds all the names of the theme folders in the theme directory
+		//May need to change to find like a <theme-name>/description.json so that it can have an img and a name along with it
+		//besides just the directory name
 		allThemes: function(req, res){
 			getDirs(path.join(process.cwd(), "themes")).then(function(dirs){
 				res.send({
@@ -37,10 +42,17 @@ module.exports = function(db, config){
 			});
 		},
 		changeTheme: function(req, res){
-			config.theme = req.body.theme;
-			fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config, null, "  "), function(err){
+			var theme = req.body.theme;
+			
+			if(theme !== config.theme){
+				config.theme = theme;
+			
+				fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config, null, "  "), function(err){
+					res.send(200);
+				});
+			}else{
 				res.send(200);
-			});
+			}
 		},
 		changeBlogName: function(req, res){
 			config["blog-name"] = req.body.blogName;

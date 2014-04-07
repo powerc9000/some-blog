@@ -7,20 +7,26 @@ module.exports = function(db, config){
 	var ejs = require("ejs");
 	var path = require('path');
 	 
+	
+	this.get("/theme/*", function(req, res){
+		//Cut off the '/theme/' part of the path
+		var file = req.path.slice(7);
+		//Proxy over requests to /theme/ to the actaul theme directory 
+		//Will have to see if this is a bottleneck
+		var theme = config.theme || "default";
+		res.sendfile(path.join(__dirname, "themes", theme, file));
+	});
 	//Catches everyting except /api and gives the index page for angularjs
 	//Public things like javascript and css are resolved before this
 	//But if you get a 404 on any of them it gives you the index page 
 	//then angular tries to load that inside the template recursively
 	//Stalling the page.
 	//Probably a better way to handle this
-	this.get("/theme/*", function(req, res){
-		var file = req.path.slice(7);
-		var theme = config.theme || "default";
-		res.sendfile(path.join(__dirname, "themes", theme, file));
-	});
 	this.get(/^((?!\/api).)*$/, function(req, res){
+		//All requests to URLS except /api just get the index.html probably should check if it has a file extension and deliver a 404 if so.
+		//look for index.html in the current theme directory
 		var theme = config.theme || "default";
-		console.log(config);
+
 		fs.readFile(path.join(__dirname, "themes", theme, "index.html"), "utf8", function(err, data){
 			if(!err){
 				res.end(ejs.render(data, {auth:req.session.auth, blogName:config["blog-name"]}));

@@ -84,7 +84,7 @@ function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
 	$scope.changeTheme = function(theme){
 		$http.post("/api/change-theme/", {theme:theme}).success(function(){
 			$scope.currentTheme = theme;
-			alertify.alert("Theme changed successfully");
+			alertify.success("Theme changed successfully");
 		});
 	};
 }
