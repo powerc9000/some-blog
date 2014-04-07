@@ -31,14 +31,26 @@ module.exports = function(db, config){
 
 	return{
 		//Finds all the names of the theme folders in the theme directory
-		//May need to change to find like a <theme-name>/description.json so that it can have an img and a name along with it
+		//May need to change to find like a <theme-name>/theme.json so that it can have an img and a name along with it
 		//besides just the directory name
 		allThemes: function(req, res){
+			var themes = [];
 			getDirs(path.join(process.cwd(), "themes")).then(function(dirs){
-				res.send({
-					currentTheme: config.theme || "default",
-					themes: dirs
+				dirs.forEach(function(d, i){
+					fs.readFile(path.join(process.cwd(), "themes", d, "theme.json"), "utf8", function(err, data){
+						if(err) return;
+						var t = JSON.parse(data);
+						t.tag = d;
+						themes.push(t);
+						if(i + 1=== dirs.length){
+							res.send({
+								currentTheme: config.theme || "default",
+								themes: themes
+							});
+						}
+					});
 				});
+				
 			});
 		},
 		changeTheme: function(req, res){

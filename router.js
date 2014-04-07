@@ -6,7 +6,6 @@ module.exports = function(db, config){
 	var fs = require("fs");
 	var ejs = require("ejs");
 	var path = require('path');
-	 
 	
 	this.get("/theme/*", function(req, res){
 		//Cut off the '/theme/' part of the path

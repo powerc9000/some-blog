@@ -19,8 +19,9 @@ Simply do `node app.js` and navigate to `localhost:3000`
 
 * Discourse comments
 * Themes
-  * look up description.json for themes so they can set a name and an image for use in the settings area
+  * look up theme.json for themes so they can set a name and an image for use in the settings area
 * Authors
 * User Settings
+* Move admin into its own app
 * Blog Settings
 
