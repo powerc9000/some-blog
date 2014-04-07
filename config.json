@@ -1,1 +1,4 @@
-{"theme":"default", "blog-name":"Some Blog"}
+{
+  "theme": "default",
+  "blog-name": "Some Blog"
+}

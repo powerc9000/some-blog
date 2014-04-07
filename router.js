@@ -20,9 +20,10 @@ module.exports = function(db, config){
 	});
 	this.get(/^((?!\/api).)*$/, function(req, res){
 		var theme = config.theme || "default";
+		console.log(config);
 		fs.readFile(path.join(__dirname, "themes", theme, "index.html"), "utf8", function(err, data){
 			if(!err){
-				res.end(ejs.render(data, {auth:req.session.auth}));
+				res.end(ejs.render(data, {auth:req.session.auth, blogName:config["blog-name"]}));
 			}else{
 				res.send(404);
 			}
@@ -38,7 +39,8 @@ module.exports = function(db, config){
 	this.get("/api/draft/:id", auth.checkAuth, posts.getDraft);
 	this.post("/api/deleteDraft", auth.checkAuth, posts.deleteDraft);
 	this.get("/api/all-themes", auth.checkAuth, blogSettings.allThemes);
-	this.post("/api/change-theme/:theme", auth.checkAuth, blogSettings.changeTheme);
+	this.post("/api/change-theme", auth.checkAuth, blogSettings.changeTheme);
+	this.post("/api/change-blog-name", auth.checkAuth, blogSettings.changeBlogName);
 	//Public routes
 	this.get("/api/post/:slug", posts.getPost);
 	this.get("/api/posts", posts.getAll);

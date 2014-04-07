@@ -37,8 +37,14 @@ module.exports = function(db, config){
 			});
 		},
 		changeTheme: function(req, res){
-			config.theme = req.params.theme;
-			fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config), function(err){
+			config.theme = req.body.theme;
+			fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config, null, "  "), function(err){
+				res.send(200);
+			});
+		},
+		changeBlogName: function(req, res){
+			config["blog-name"] = req.body.blogName;
+			fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config, null, "  "), function(err){
 				res.send(200);
 			});
 		}

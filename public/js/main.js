@@ -6,8 +6,8 @@
 	}
 	]).run(function($rootScope){
 		$rootScope.root_page_title = "Some Blog";
-		$rootScope.blog_name = "Some Blog";
 		$rootScope.auth = window.auth;
+		$rootScope.blog_name = window.blogName;
 	});
 
 	app.factory("setTitle", function($rootScope){
