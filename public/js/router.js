@@ -69,11 +69,23 @@ function auth($rootScope, $q, $location){
 function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
 	setTitle("Blog Settings");
 	$scope.blog_name_new = $rootScope.blog_name;
+	$http.get("/api/all-themes").success(function(data){
+		$scope.themes = data.themes;
+		$scope.currentTheme = data.currentTheme;
+	}).error(function(){
+		alertify.error("Could not load current themes");
+	});
 	$scope.saveBlogName = function(){
 		//$http.post("/api/change-blog-name", {name:$scope.blog_name_new}).success(function(){
 			$rootScope.blog_name = $scope.blog_name_new;
 			setTitle("Blog Settings");
 		//})
+	};
+	$scope.changeTheme = function(theme){
+		$http.post("/api/change-theme/"+theme).success(function(){
+			$scope.currentTheme = theme;
+			alertify.alert("Theme changed successfully");
+		});
 	};
 }
 

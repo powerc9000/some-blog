@@ -5,3 +5,9 @@
 
 <a href="#" ng-click="saveBlogName()" class="btn btn-primary">Save</a>
 </form>
+
+<div>
+	<h4>Change Theme</h4>
+	<a href="#" ng-click="changeTheme(theme)" ng-repeat="theme in themes" ng-class="{'label-primary': theme == currentTheme}" class="label">{{theme}}</a>
+</div>
+

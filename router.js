@@ -1,12 +1,12 @@
 
-module.exports = function(db){
+module.exports = function(db, config){
 	var posts = require("./routes/posts")(db);
 	var auth = require("./routes/auth")(db);
+	var blogSettings = require("./routes/blogSettings")(db, config);
 	var fs = require("fs");
 	var ejs = require("ejs");
-	var config = require("./config");
 	var path = require('path');
-	
+	 
 	//Catches everyting except /api and gives the index page for angularjs
 	//Public things like javascript and css are resolved before this
 	//But if you get a 404 on any of them it gives you the index page 
@@ -16,7 +16,6 @@ module.exports = function(db){
 	this.get("/theme/*", function(req, res){
 		var file = req.path.slice(7);
 		var theme = config.theme || "default";
-		console.log(path.join(__dirname, "themes", theme, file));
 		res.sendfile(path.join(__dirname, "themes", theme, file));
 	});
 	this.get(/^((?!\/api).)*$/, function(req, res){
@@ -38,7 +37,8 @@ module.exports = function(db){
 	this.post("/api/newdraft", auth.checkAuth, posts.newDraft);
 	this.get("/api/draft/:id", auth.checkAuth, posts.getDraft);
 	this.post("/api/deleteDraft", auth.checkAuth, posts.deleteDraft);
-
+	this.get("/api/all-themes", auth.checkAuth, blogSettings.allThemes);
+	this.post("/api/change-theme/:theme", auth.checkAuth, blogSettings.changeTheme);
 	//Public routes
 	this.get("/api/post/:slug", posts.getPost);
 	this.get("/api/posts", posts.getAll);

@@ -12,8 +12,7 @@ var path = require('path');
 var ejs = require("ejs");
 var app = express();
 var db = require("./database")();
-var config = require("./config");
-
+var config = JSON.parse(fs.readFileSync(path.join(__dirname, "config.json"), "utf8"));
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "html");
@@ -38,7 +37,7 @@ app.use(app.router);
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-router.call(app, db);
+router.call(app, db, config);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
