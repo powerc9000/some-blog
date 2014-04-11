@@ -85,8 +85,7 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 	$scope.newPost = function(){
 		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug, tags:$scope.tags}).success(function(data){
 			$location.path("/admin/posts");
-			alertify.success("Post was edited successfully")
-			//alert("Okay");
+			alertify.success("Post was edited successfully");
 		}).error(function(data){
 			alertify.alert(data.error);
 		});
@@ -111,7 +110,6 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
 	$scope.newPost = function(){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope.draft._id}).success(function(data){
 			$location.path("/post/"+data.slug);
-			//alert("Okay");
 		}).error(function(){
 			alert("Not okay");
 		});
@@ -141,9 +139,7 @@ function createCtrl($scope, $http, $location, setTitle){
 	setTitle("Create Post");
 	$scope.newPost = function(){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){
-			//$location.path();
 			window.location.href="/post/"+data.slug;
-			//alert("Okay");
 		}).error(function(data){
 			alertify.error(data.error);
 		});
