@@ -1,7 +1,7 @@
 <h3>Drafts</h3>
 <div class="row" ng-show="drafts.length" ng-repeat="draft in drafts">
-	<a ng-href="/admin/draft/{{draft._id}}">{{draft.title || "Untitled Draft"}}</a>
+  <a ng-href="/admin/draft/{{draft._id}}">{{draft.title || "Untitled Draft"}}</a>
 </div>
 <div class="row" ng-show="!drafts.length">
-	<p>There are no drafts currently</p>
+  <p>There are no drafts currently</p>
 </div>

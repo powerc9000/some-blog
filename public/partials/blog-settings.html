@@ -7,19 +7,19 @@
 </form>
 
 <div>
-	<h4>Change Theme</h4>
-	<div class="row themes">
-	  <div class="col-sm-6 col-md-4" ng-repeat="theme in themes">
-	    <div class="thumbnail">
-	      <img ng-src="{{theme.img}}" alt="Theme image" title="{{theme.name}} Image" >
-	      <div class="caption">
-	        <h3>{{theme.name}}</h3>
-	        <p>{{theme.description}}</p>
-	        <p>
-	        <a href="#" ng-click="changeTheme(theme.tag)" class="btn btn-primary" role="button" ng-class="{'disabled' :theme.tag == currentTheme }">Activate Theme</a>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+  <h4>Change Theme</h4>
+  <div class="row themes">
+    <div class="col-sm-6 col-md-4" ng-repeat="theme in themes">
+      <div class="thumbnail">
+        <img ng-src="{{theme.img}}" alt="Theme image" title="{{theme.name}} Image" >
+        <div class="caption">
+          <h3>{{theme.name}}</h3>
+          <p>{{theme.description}}</p>
+          <p>
+          <a href="#" ng-click="changeTheme(theme.tag)" class="btn btn-primary" role="button" ng-class="{'disabled' :theme.tag == currentTheme }">Activate Theme</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 

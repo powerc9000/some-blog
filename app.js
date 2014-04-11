@@ -28,8 +28,8 @@ app.use(express.cookieSession());
 app.use(express.csrf());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
-	res.cookie('XSRF-TOKEN', req.csrfToken());
-	next();
+  res.cookie('XSRF-TOKEN', req.csrfToken());
+  next();
 });
 app.use(app.router);
 

@@ -1,65 +1,73 @@
 var app = angular.module("admin", ["adminRouter", "ngSanitize"]).config(['$httpProvider', function($httpProvider) {
-		$httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
-		$httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';
-	}
-	]).run(function($rootScope){
-		$rootScope.root_page_title = "Some Blog";
-		$rootScope.blog_name = window.blogName;
-		$rootScope.auth = window.auth;
-	});
+    $httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';
+  }
+  ]).run(function($rootScope){
+    $rootScope.root_page_title = "Some Blog";
+    $rootScope.blog_name = window.blogName;
+    $rootScope.auth = window.auth;
+  });
 
-	app.factory("setTitle", function($rootScope){
-		return function(title){
-			$rootScope.root_page_title = title + " | " + $rootScope.blog_name;
-		};
-	});
-	app.directive("activeLink", function($location){
-		return function(scope, el, attr){
-			scope.$on("$routeChangeSuccess", function(){
-				if($location.path() === attr.activeLink){
-					el[0].classList.add("active");
-				}else{
-					el[0].classList.remove("active");
-				}
-			});
-			
-		};
-	});
+  app.factory("setTitle", function($rootScope){
+    return function(title){
+      $rootScope.root_page_title = title + " | " + $rootScope.blog_name;
+    };
+  });
+  app.directive("activeLink", function($location){
+    return function(scope, el, attr){
+      scope.$on("$routeChangeSuccess", function(){
+        if($location.path() === attr.activeLink){
+          el[0].classList.add("active");
+        }else{
+          el[0].classList.remove("active");
+        }
+      });
+      
+    };
+  });
+
+// app.directive("breadcrumbs", function(){
+//   return {
+//     restrict: "E",
+//     templateUrl: "/partials/admin-breadcrumbs.html"
+//   };
+// });
+
 app.directive("markdown", function($timeout){
-	return function(scope, el, attr){
-		scope.$watch(attr.markdown, doMarkdownAndTex);
+  return function(scope, el, attr){
+    scope.$watch(attr.markdown, doMarkdownAndTex);
 
-		function doMarkdownAndTex(val, old){
-			var words;
-			var lines;
-			old = old || "";
-			//Finds links
-			var linkRegex = /(?:ftp|http|https):\/\/(?:[\w\.\-\+]+:{0,1}[\w\.\-\+]*@)?(?:[a-z0-9\-\.]+)(?::[0-9]+)?(?:\/|\/(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+)|\?(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+))?$/ig;
-			if(val){
+    function doMarkdownAndTex(val, old){
+      var words;
+      var lines;
+      old = old || "";
+      //Finds links
+      var linkRegex = /(?:ftp|http|https):\/\/(?:[\w\.\-\+]+:{0,1}[\w\.\-\+]*@)?(?:[a-z0-9\-\.]+)(?::[0-9]+)?(?:\/|\/(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+)|\?(?:[\w#!:\.\?\+=&%@!\-\/\(\)]+))?$/ig;
+      if(val){
 
-				//Split the entire Markdown string into lines then words
-				lines = val.split("\n");
-				lines.forEach(function(l, i){
-					words = l.split(" ");
-					words.forEach(function(w, i){
-						w.replace(linkRegex, function(match, idx, word){
-							words[i] = "["+word+"]"+"("+match+")";
-						});
-					});
-					lines[i] = words.join(" ");
-				});
-				
-				val = lines.join("\n");
-				el[0].innerHTML = markdown.toHTML(val, "Gruber", {sanitize:false});
-				$timeout(function(){
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub, el[0]]);
-				}, 0);
-				
-			}
-			else{
-				el[0].innerHTML = "";
-			}
-		}
-	};
-	
+        //Split the entire Markdown string into lines then words
+        lines = val.split("\n");
+        lines.forEach(function(l, i){
+          words = l.split(" ");
+          words.forEach(function(w, i){
+            w.replace(linkRegex, function(match, idx, word){
+              words[i] = "["+word+"]"+"("+match+")";
+            });
+          });
+          lines[i] = words.join(" ");
+        });
+        
+        val = lines.join("\n");
+        el[0].innerHTML = markdown.toHTML(val, "Gruber", {sanitize:false});
+        $timeout(function(){
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub, el[0]]);
+        }, 0);
+        
+      }
+      else{
+        el[0].innerHTML = "";
+      }
+    }
+  };
+  
 });
