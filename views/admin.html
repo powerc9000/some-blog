@@ -1,4 +1,4 @@
-<html ng-app="main">
+<html ng-app="admin">
 	<head>
 		<title ng-bind="root_page_title"></title>
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -9,8 +9,8 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-sanitize.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-		<script src="/js/router.js"></script>
-		<script src="/js/main.js"></script>
+		<script src="/js/admin-router.js"></script>
+		<script src="/js/admin.js"></script>
 		<script>
 			//I dont have to do this but jshint was being annoying so I did.
 			//The server just loads in if we are logged in or not so that angular doesnt have to make a request.
@@ -26,16 +26,15 @@
 				</div>
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li active-link="/"><a href="/" >Home</a></li>
-						<%if(auth){%>
-							<li active-link="/admin" ><a href="/admin" target="_self">Admin</a></li>
-						<%}%>
+						<li active-link="/"><a href="/" target="_self" >Home</a></li>
+						
+						<li ng-show="auth" active-link="/admin"><a href="/admin">Admin</a></li>
+						
 					</ul>
-					<%if(auth){%>
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="/logout">Logout</a></li>
+
+					<ul ng-show="auth" class="nav navbar-nav navbar-right">
+						<li><a href="/logout" target="_self">Logout</a></li>
 					</ul>
-					<%}%>
 				</div>
 			</div>
 		</nav>

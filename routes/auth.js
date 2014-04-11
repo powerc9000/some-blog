@@ -17,6 +17,14 @@ module.exports = function(db){
 				res.send({"error":"you must be logged in"}, 401);
 			}
 		},
+		checkAuthRedirect: function(req, res, next){
+			if(req.session.auth){
+				next();
+			}else{
+				res.method = "get";
+				res.redirect("/login");
+			}
+		},
 		logout: function(req, res){
 			req.session.auth = false;
 			res.send(200);
@@ -30,18 +38,18 @@ module.exports = function(db){
 					req.session.auth = r;
 					if(!r || err){
 						console.log(err);
-						res.send({"error":"Username or password incorrect"}, 401)
+						res.send({"error":"Username or password incorrect"}, 401);
 					}
 					else{
 						res.send(200);
 					}
-				})
+				});
 				
 			}, function(err){
 				req.session.auth = false;
 				res.send(err, 401);
-			})
+			});
 
 		}
-	}
-}
+	};
+};
