@@ -36,7 +36,7 @@ function postListCtrl($scope, $http, $location){
     function doDelete(){
       $http.post("/api/deletepost/"+that.post.slug).success(function(){
         alertify.success("Post deleted successfully");
-        $scope.posts.splice($scope.posts.indexOf(this.post), 1);
+        $scope.posts.splice($scope.posts.indexOf(that.post), 1);
       }).error(function(data){
         console.log(data);
       });
@@ -52,12 +52,22 @@ function postListCtrl($scope, $http, $location){
 function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
   setTitle("Blog Settings");
   $scope.blog_name_new = $rootScope.blog_name;
+  $scope.blogNewDescription = $scope.blogDescription;
   $http.get("/api/all-themes").success(function(data){
     $scope.themes = data.themes;
     $scope.currentTheme = data.currentTheme;
   }).error(function(){
-    alertify.error("Could not load current themes");
+    alertify.error("Could not load themes");
   });
+  $http.get("/api/admin/blog-description").success(function(data){
+    $scope.blogNewDescription = $scope.blogDescription = data;
+  });
+  $scope.saveBlogDescription = function(){
+    $http.post("/api/change-blog-description", {blogDescription:$scope.blogNewDescription}).success(function(){
+      alertify.success("Desciption successfully changed");
+    });
+  };
+
   $scope.saveBlogName = function(){
     $http.post("/api/change-blog-name", {blogName:$scope.blog_name_new}).success(function(){
       $rootScope.blog_name = $scope.blog_name_new;

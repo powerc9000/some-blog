@@ -2,6 +2,7 @@ module.exports = function(db, config){
   var fs = require("fs");
   var Q = require("q");
   var path = require("path");
+  var helpers = require("../helpers");
   //Returns the names of all the directories in a directory
   getDirs = function(rootDir) {
     var q = Q.defer();
@@ -52,6 +53,12 @@ module.exports = function(db, config){
         });
         
       });
+    },
+    changeBlogDescription: function(req, res){
+      config.description =  req.body.blogDescription;
+      fs.writeFile(path.join(process.cwd(), "config.json"), JSON.stringify(config, null, "  "), function(err){
+        res.send(200);
+      });      
     },
     changeTheme: function(req, res){
       var theme = req.body.theme;

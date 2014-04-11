@@ -25,6 +25,22 @@ var app = angular.module("admin", ["adminRouter", "ngSanitize"]).config(['$httpP
       
     };
   });
+  app.directive("expandTextarea", function(){
+    return function(scope, el, attrs){
+      el[0].style.height = el[0].style.height || 0;
+
+      scope.$watch(attrs.expandTextarea, function(){
+        console.log(parseInt(el[0].style.height));
+        if(!el) return;
+        if(el[0].scrollHeight > parseInt(el[0].style.height)){
+          el[0].style.height = el[0].scrollHeight + "px";
+        }else{
+          el[0].style.height = el[0].scrollHeight + "px";
+        }
+        
+      });
+    };
+  });
 
 // app.directive("breadcrumbs", function(){
 //   return {

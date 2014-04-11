@@ -8,12 +8,19 @@ router.config(function($routeProvider, $locationProvider){
   .when("/tag/:tag", {controller:tagCtrl, templateUrl:"/theme/partials/tags.html"})
   .when("/login", {controller:loginCtrl, templateUrl:"/theme/partials/login.html"})
   .when("/logout", {controller:logoutCtrl, templateUrl:"/theme/partials/login.html"})
+  .when("/about", {controller:aboutCtrl, templateUrl:"/theme/partials/about.html"})
   //Auth things
   .otherwise({controller:_404Ctrl, templateUrl:"/partials/404.html"});
 });
 
 function _404Ctrl(){
 
+}
+
+function aboutCtrl($scope, $http){
+  $http.get("/api/blog-description").success(function(data){
+    $scope.description = data;
+  });
 }
 
 function mainCtrl($scope, $http, setTitle, $location){

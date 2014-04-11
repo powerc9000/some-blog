@@ -1,12 +1,42 @@
-<h3>Blog Settings</h3>
-<form action="" class="form-inline">
-<label for="">Blog Name</label>
-<input type="text" class="form-control" ng-model="blog_name_new" value="{{blog_name}}">
+<div class="page-header">
+  <h3>Blog Settings</h3>
+</div>
 
-<a href="#" ng-click="saveBlogName()" class="btn btn-primary">Save</a>
-</form>
+<div class="row">
+  <form action="" class="form-inline">
+    <label for="">Blog Name</label>
+    <input type="text" class="form-control" ng-model="blog_name_new" value="{{blog_name}}">
+    <a href="#" ng-click="saveBlogName()" class="btn btn-primary">Save</a>
+  </form>
+</div>
+<hr>
+<diw class="row">
+  <form action="" class="form form-horizontal">
+    <div class="form-group">
+      <label for="">Blog Description</label>
+      <div class="row">
+        <div class="col-md-8">
+          <textarea name="" id="" class="form-control" ng-model="blogNewDescription" expand-textarea="blogNewDescription" ng-trim="false"></textarea>
+        </div>
+        <div class="col-md-4">
+          <div>
+            Show preview <input type="checkbox" checked ng-model="showPreview" ng-init="showPreview = true">
+          </div>
+         <div markdown="blogNewDescription" ng-show="showPreview"></div> 
+        </div>
+          
+      </div>
+      
+    </div>
+  
+    <div class="form-group">
+       <a href="#" ng-click="saveBlogDescription()" class="btn btn-primary">Save</a>
+    </div>
+   
+  </form>
+</diw>
 
-<div>
+<div class="row">
   <h4>Change Theme</h4>
   <div class="row themes">
     <div class="col-sm-6 col-md-4" ng-repeat="theme in themes">
@@ -22,4 +52,6 @@
     </div>
   </div>
 </div>
+
+
 
