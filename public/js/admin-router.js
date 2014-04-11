@@ -29,6 +29,24 @@ function postListCtrl($scope, $http, $location){
 		$scope.count = data.count;
 		$scope.posts = data.posts;
 	});
+
+	$scope.deletePost = function(){
+		var that = this;
+		//delete this.post;
+		function doDelete(){
+			$http.post("/api/deletepost/"+that.post.slug).success(function(){
+				alertify.success("Post deleted successfully");
+				$scope.posts.splice($scope.posts.indexOf(this.post), 1);
+			}).error(function(data){
+				console.log(data);
+			});
+		}
+		alertify.confirm("Are you sure you want to delete this post", function(e){
+			if(e){
+				doDelete();
+			}
+		});
+	};
 }
 
 function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
@@ -66,7 +84,8 @@ function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
 	});
 	$scope.newPost = function(){
 		$http.post("/api/editpost", {title:$scope.newPostTitle, body:$scope.newPostBody, slug:$scope.post.slug, tags:$scope.tags}).success(function(data){
-			$location.path("/post/"+$scope.post.slug);
+			$location.path("/admin/posts");
+			alertify.success("Post was edited successfully")
 			//alert("Okay");
 		}).error(function(data){
 			alertify.alert(data.error);
@@ -122,7 +141,8 @@ function createCtrl($scope, $http, $location, setTitle){
 	setTitle("Create Post");
 	$scope.newPost = function(){
 		$http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){
-			$location.path("/post/"+data.slug);
+			//$location.path();
+			window.location.href="/post/"+data.slug;
 			//alert("Okay");
 		}).error(function(data){
 			alertify.error(data.error);
@@ -140,7 +160,7 @@ function createCtrl($scope, $http, $location, setTitle){
 		alertify.confirm("Do you really want to cancel? All your progress will be lost.", function(res){
 			if(res){
 				$scope.$apply(function(){
-					$location.path("/");
+					$location.path("/admin");
 				});
 				
 			}
@@ -148,18 +168,3 @@ function createCtrl($scope, $http, $location, setTitle){
 	};
 }
 
-// $scope.deletePost = function(){
-// 		function doDelete(){
-// 			$http.post("/api/deletepost/"+$routeParams.slug).success(function(){
-// 				alertify.success("Post deleted successfully");
-// 				$location.path("/");
-// 			}).error(function(data){
-// 				console.log(data);
-// 			});
-// 		}
-// 		alertify.confirm("Are you sure you want to delete this post", function(e){
-// 			if(e){
-// 				doDelete();
-// 			}
-// 		});
-// 	};
