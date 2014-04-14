@@ -23,14 +23,12 @@ module.exports = function(db, config){
   //Stalling the page.
   //Probably a better way to handle this
   this.get("/admin*", auth.checkAuthRedirect, function(req, res){
-    console.log("here tho");
     res.render("admin", {auth:req.session.auth, blogName:config["blog-name"]});
   });
   this.get(/^((?!\/api).)*$/, function(req, res){
     //All requests to URLS except /api just get the index.html probably should check if it has a file extension and deliver a 404 if so.
     //look for index.html in the current theme directory
     var theme = config.theme || "default";
-    console.log(req.path);
     fs.readFile(path.join(__dirname, "themes", theme, "index.html"), "utf8", function(err, data){
       if(!err){
         res.end(ejs.render(data, {auth:req.session.auth, blogName:config["blog-name"]}));

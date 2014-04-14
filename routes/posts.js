@@ -126,7 +126,6 @@ module.exports = function(db){
     },
 
     getAll: function(req, res){
-      console.log(process.cwd());
       var page = req.query.page;
       var start; 
       var amt = 10;
