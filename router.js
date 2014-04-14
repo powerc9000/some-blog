@@ -23,13 +23,14 @@ module.exports = function(db, config){
   //Stalling the page.
   //Probably a better way to handle this
   this.get("/admin*", auth.checkAuthRedirect, function(req, res){
+    console.log("here tho");
     res.render("admin", {auth:req.session.auth, blogName:config["blog-name"]});
   });
   this.get(/^((?!\/api).)*$/, function(req, res){
     //All requests to URLS except /api just get the index.html probably should check if it has a file extension and deliver a 404 if so.
     //look for index.html in the current theme directory
     var theme = config.theme || "default";
-    console.log(config);
+    console.log(req.path);
     fs.readFile(path.join(__dirname, "themes", theme, "index.html"), "utf8", function(err, data){
       if(!err){
         res.end(ejs.render(data, {auth:req.session.auth, blogName:config["blog-name"]}));
@@ -51,16 +52,12 @@ module.exports = function(db, config){
   this.post("/api/change-theme", auth.checkAuth, blogSettings.changeTheme);
   this.post("/api/change-blog-name", auth.checkAuth, blogSettings.changeBlogName);
   this.post("/api/change-blog-description", auth.checkAuth, blogSettings.changeBlogDescription);
-  this.get("/api/admin/blog-description", auth.checkAuth, function(req, res){
-    res.send(config.description);
-  });
+  this.get("/api/admin/blog-about", auth.checkAuth, posts.aboutPost);
   //Public routes
   this.get("/api/post/:slug", posts.getPost);
   this.get("/api/posts", posts.getAll);
   this.get("/api/tag/:tag", posts.getByTag);
-  this.get("/api/blog-description", function(req, res){
-    res.send(helpers.doMarkdown(config.description));
-  });
+  this.get("/api/about-blog", posts.aboutPost);
   //login logout stuff
   this.post("/api/logout", auth.logout);
   this.get("/api/isAuth", auth.isAuth);

@@ -40,6 +40,20 @@ module.exports = function(config){
       });
       return q.promise;
     },
+    getAboutPost: function(){
+      var q = Q.defer();
+      db.then(function(client){
+        var c = client.collection("posts");
+        c.findOne({"title":"About"}, function(err, post){
+          if(err){
+            q.reject();
+          }else{
+            q.resolve(post);
+          }
+        });
+      });
+      return q.promise;
+    },
     deleteDraft: function(id){
       var q = Q.defer();
       db.then(function(client){

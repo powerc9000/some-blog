@@ -1,6 +1,6 @@
 (function(angular){
   "use strict";
-  var app = angular.module("main", ["router", "ngSanitize"]).config(['$httpProvider', function($httpProvider) {
+  var app = angular.module("main", ["router", "ngSanitize", "directives"]).config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';
   }

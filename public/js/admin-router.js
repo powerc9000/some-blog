@@ -116,16 +116,17 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
     $scope.draft = data;
     $scope.newPostTitle = data.title;
     $scope.newPostBody = data.body;
+    $scope.tags = data.tags.join(", ");
   });
   $scope.newPost = function(){
-    $http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope.draft._id}).success(function(data){
+    $http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, isdraft:true, draftid:$scope.draft._id, tags:$scope.tags}).success(function(data){
       $location.path("/post/"+data.slug);
     }).error(function(){
       alert("Not okay");
     });
   };
   $scope.saveDraft = function(){
-    $http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
+    $http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){
       $http.post("/api/deleteDraft", {id:$scope.draft._id}).success(function(){
         $location.replace();
         $location.path("/admin/draft/"+data._id);
@@ -133,6 +134,13 @@ function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
       });
     }).error(function(){
       alertify.error("oops something went wrong please try again!");
+    });
+  };
+  $scope.deleteDraft = function(){
+    $http.post("/api/deleteDraft", {id:$scope.draft._id}).success(function(){
+      alertify.success("Draft Delete");
+      $location.replace();
+      $location.path("/admin");
     });
   };
 }
@@ -155,7 +163,7 @@ function createCtrl($scope, $http, $location, setTitle){
     });
   };
   $scope.draft = function(){
-    $http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody}).success(function(data){
+    $http.post("/api/newdraft", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){
       $location.path("/admin");
       alertify.success("Draft saved!");
     }).error(function(){

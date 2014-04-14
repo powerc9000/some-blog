@@ -1,3 +1,4 @@
+<!doctype html>
 <html ng-app="main">
   <head>
     <title ng-bind="root_page_title"></title>
@@ -9,6 +10,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-sanitize.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+    <script src="/js/directives.js"></script>
     <script src="/js/router.js"></script>
     <script src="/js/main.js"></script>
     <script>
@@ -17,14 +19,21 @@
       window.auth = ("<%=auth%>" === "true");
       window.blogName = "<%=blogName%>";
     </script>
+    <meta name="viewport" content="width=device-width">
   </head>
   <body>
     <nav class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">
-          <a href="#" class="navbar-brand">{{blog_name}}</a>
+          <a href="/" target="_self" class="navbar-brand">{{blog_name}}</a>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" toggle data-target="#main-nav">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="main-nav">
           <ul class="nav navbar-nav">
             <li active-link="/"><a href="/" >Home</a></li>
             <li active-link="/about"><a href="/about">About</a></li>
