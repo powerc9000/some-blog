@@ -123,6 +123,26 @@ module.exports = function(config){
       });
       return q.promise;
     },
+    incrementPostViews: function(slug){
+      var q = Q.defer();
+      var post;
+      this.getPost(slug).then(function(post_){
+        post = post_;
+        return db;
+      }).then(function(client){
+        var c = client.collection("posts");
+        var views = post.views || 0;
+        c.update({"slug": post.slug}, {$set:{views:views + 1}}, function(err, post){
+          if(!err){
+            q.resolve(post.views);
+          }else{
+            q.reject(err);
+          }
+        });
+      });
+
+      return q;
+    },
     getPostsByTag: function(tag, start, amt){
       var q = Q.defer();
       db.then(function(client){

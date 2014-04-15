@@ -74,6 +74,7 @@ module.exports = function(db){
     getPost:function(req, res){
       db.getPost(req.params.slug).then(function(post){
         res.send(post);
+        db.incrementPostViews(post.slug);
       }, function(){
         res.send(404);
       });

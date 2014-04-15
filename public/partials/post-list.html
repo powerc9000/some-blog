@@ -6,6 +6,7 @@
       <td>Title</td>
       <td>Post Date</td>
       <td>Tags</td>
+      <td>Views</td>
       <td>Actions</td>
     </tr>
   </thead>
@@ -19,6 +20,7 @@
         <a href="/tag/{{tag}}" target="_self" class ="label label-primary tag" >{{tag}}</a> 
       </span>
     </td>
+    <td>{{post.views || 0}}</td>
     <td><a href="/admin/edit/{{post.slug}}" class="btn btn-primary">Edit</a> <button class="btn btn-danger" ng-click="deletePost()">Delete</button></td>
   </tr>
 </table>
