@@ -1,0 +1,21 @@
+body{
+  background:#520575;
+}
+
+.post-contain{
+  background:white;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow: 1px 1px 10px #1e1e1e;
+}
+.navbar-default .navbar-nav>li>a {
+  color: black;
+}
+.navbar-default .navbar-nav>li>a:hover {
+  background:#802EA6;
+  color: white;
+}
+.navbar-default {
+  background-color: white;
+  /*border-color: #6F1B97;*/
+}

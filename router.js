@@ -16,6 +16,9 @@ module.exports = function(db, config){
     var theme = config.theme || "default";
     res.sendfile(path.join(__dirname, "themes", theme, file));
   });
+
+
+
   //Catches everyting except /api and gives the index page for angularjs
   //Public things like javascript and css are resolved before this
   //But if you get a 404 on any of them it gives you the index page 
@@ -51,6 +54,7 @@ module.exports = function(db, config){
   this.post("/api/change-blog-name", auth.checkAuth, blogSettings.changeBlogName);
   this.post("/api/change-blog-description", auth.checkAuth, blogSettings.changeBlogDescription);
   this.get("/api/admin/blog-about", auth.checkAuth, posts.aboutPost);
+  this.get("/api/reload-themes", auth.checkAuth, blogSettings.allThemes);
   //Public routes
   this.get("/api/post/:slug", posts.getPost);
   this.get("/api/posts", posts.getAll);

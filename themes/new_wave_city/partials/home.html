@@ -1,0 +1,7 @@
+<div class="post" ng-repeat="post in posts">
+  <blog-post></blog-post>
+</div>
+<ul class="pager">
+  <li class="previous" ng-class="{disabled:page<=1}"><a href="?page={{nextPrev()}}">&larr; Newer</a></li>
+  <li class="next" ng-class="{disabled:!nextPage}"><a href="?page={{nextPrev(true)}}" >Older &rarr;</a></li>
+</ul>

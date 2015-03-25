@@ -1,0 +1,14 @@
+<div class="post-contain">
+  <div class="post-title">
+    <div class="post-date pull-right">{{post.date | date}}</div>
+    <h1><a href="/post/{{post.slug}}">{{post.title}}</a></h1>
+  </div>
+  <div class="post-body">
+    <div ng-bind-html="post.body" tex="post.body" youtube="post.body"></div>
+  </div>
+  <div class="tags" ng-show="post.tags">
+    <span ng-repeat="tag in post.tags">
+      <a href="/tag/{{tag}}" class ="label label-primary tag" >{{tag}}</a> 
+    </span>
+  </div>
+</div>

@@ -62,6 +62,15 @@ function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
   $http.get("/api/admin/blog-description").success(function(data){
     $scope.blogNewDescription = $scope.blogDescription = data;
   });
+  $scope.reloadThemes = function(){
+    $http.get("/api/reload-themes").success(function(data){
+      $scope.themes = data.themes;
+      $scope.currentTheme = data.currentTheme;
+      alertify.success("Successfully reloaded themes");
+    }).error(function(){
+      alertify.error("Could not reload themes");
+    })
+  }
   $scope.saveBlogDescription = function(){
     $http.post("/api/change-blog-description", {blogDescription:$scope.blogNewDescription}).success(function(){
       alertify.success("Desciption successfully changed");
