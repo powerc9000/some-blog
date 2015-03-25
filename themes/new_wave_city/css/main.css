@@ -1,7 +1,9 @@
 body{
   background:#520575;
 }
-
+.navbar-default .navbar-brand{
+  color:black;
+}
 .post-contain{
   background:white;
   padding:20px;
