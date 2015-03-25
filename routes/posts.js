@@ -37,6 +37,12 @@ module.exports = function(db){
 
     },
 
+    aboutPost: function(req, res){
+      db.getAboutPost().then(function(post){
+        res.send(post);
+      });
+    },
+
     getDrafts: function(req, res){
       var start = req.query.start || 0;
       var amount = req.query.amt || 10;
@@ -49,6 +55,7 @@ module.exports = function(db){
 
     newDraft: function(req, res){
       var post = req.body;
+      post.tags = tagsToArray(req.body.tags);
       post.date = Date.now();
       db.newDraft(post).then(function(draft){
         res.send(draft);
@@ -67,6 +74,7 @@ module.exports = function(db){
     getPost:function(req, res){
       db.getPost(req.params.slug).then(function(post){
         res.send(post);
+        db.incrementPostViews(post.slug);
       }, function(){
         res.send(404);
       });
@@ -119,7 +127,6 @@ module.exports = function(db){
     },
 
     getAll: function(req, res){
-      console.log(process.cwd());
       var page = req.query.page;
       var start; 
       var amt = 10;

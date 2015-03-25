@@ -1,17 +1,27 @@
 var Q = require("q");
 
-module.exports = function(config){
+module.exports = function(){
   "use strict";
-  config = config || {
-    path:"127.0.0.1:27017",
-    db: "blog"
+  var config = {
+    path:process.env.databasePath || "127.0.0.1:27017",
+    db: process.env.databaseName ||"blog",
+    username: process.env.dbUsername || "",
+    password: process.env.dbPassword || ""
   };
   var Client = require('mongodb').MongoClient,
     Server = require('mongodb').Server,
     objId = require("mongodb").ObjectID,
     promise = Q.defer(),
     db = promise.promise;
-    Client.connect("mongodb://"+config.path+"/"+config.db, function(err, con){
+  var connectionUrl;
+
+  if(config.username && config.password){
+    connectionUrl = "mongodb://"+config.username+":"+config.password+"@"+config.path;
+  }else{
+    connectionUrl = "mongodb://"+config.path+"/"+config.db;
+  }
+
+    Client.connect(connectionUrl, function(err, con){
       promise.resolve(con);
     });
     function slugify(text) {
@@ -36,6 +46,20 @@ module.exports = function(config){
         post.slug = slugify(post.title) + "-" + randId();
         c.insert(post, function(err, records){
           q.resolve(records[0]);
+        });
+      });
+      return q.promise;
+    },
+    getAboutPost: function(){
+      var q = Q.defer();
+      db.then(function(client){
+        var c = client.collection("posts");
+        c.findOne({"title":"About"}, function(err, post){
+          if(err){
+            q.reject();
+          }else{
+            q.resolve(post);
+          }
         });
       });
       return q.promise;
@@ -108,6 +132,26 @@ module.exports = function(config){
         });
       });
       return q.promise;
+    },
+    incrementPostViews: function(slug){
+      var q = Q.defer();
+      var post;
+      this.getPost(slug).then(function(post_){
+        post = post_;
+        return db;
+      }).then(function(client){
+        var c = client.collection("posts");
+        var views = post.views || 0;
+        c.update({"slug": post.slug}, {$set:{views:views + 1}}, function(err, post){
+          if(!err){
+            q.resolve(post.views);
+          }else{
+            q.reject(err);
+          }
+        });
+      });
+
+      return q;
     },
     getPostsByTag: function(tag, start, amt){
       var q = Q.defer();

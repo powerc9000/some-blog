@@ -6,11 +6,12 @@
       <td>Title</td>
       <td>Post Date</td>
       <td>Tags</td>
+      <td>Views</td>
       <td>Actions</td>
     </tr>
   </thead>
   
-  <tr ng-repeat="post in posts | orderBy:'title'">
+  <tr ng-repeat="post in posts | orderBy:'date':true">
     <td><input type="checkbox"></td>
     <td><a href="/post/{{post.slug}}" target="_self">{{post.title}}</a></td>
     <td>{{post.date | date}}</td>
@@ -19,6 +20,7 @@
         <a href="/tag/{{tag}}" target="_self" class ="label label-primary tag" >{{tag}}</a> 
       </span>
     </td>
-    <td><a href="/admin/edit/{{post.slug}}" class="btn btn-primary">Edit</a> <a href="#" class="btn btn-danger" ng-click="deletePost()">Delete</a></td>
+    <td>{{post.views || 0}}</td>
+    <td><a href="/admin/edit/{{post.slug}}" class="btn btn-primary">Edit</a> <button class="btn btn-danger" ng-click="deletePost()">Delete</button></td>
   </tr>
 </table>

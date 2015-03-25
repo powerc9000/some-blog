@@ -37,7 +37,6 @@ module.exports = function(db){
         bcrypt.compare(pass, user.password, function(err, r){
           req.session.auth = r;
           if(!r || err){
-            console.log(err);
             res.send({"error":"Username or password incorrect"}, 401);
           }
           else{

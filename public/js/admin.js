@@ -1,4 +1,4 @@
-var app = angular.module("admin", ["adminRouter", "ngSanitize"]).config(['$httpProvider', function($httpProvider) {
+var app = angular.module("admin", ["adminRouter", "ngSanitize", "directives"]).config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'XSRF-TOKEN';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-Token';
   }
@@ -34,10 +34,7 @@ var app = angular.module("admin", ["adminRouter", "ngSanitize"]).config(['$httpP
         if(!el) return;
         if(el[0].scrollHeight > parseInt(el[0].style.height)){
           el[0].style.height = el[0].scrollHeight + "px";
-        }else{
-          el[0].style.height = el[0].scrollHeight + "px";
         }
-        
       });
     };
   });

@@ -9,6 +9,7 @@ router.config(function($routeProvider, $locationProvider){
   .when("/login", {controller:loginCtrl, templateUrl:"/theme/partials/login.html"})
   .when("/logout", {controller:logoutCtrl, templateUrl:"/theme/partials/login.html"})
   .when("/about", {controller:aboutCtrl, templateUrl:"/theme/partials/about.html"})
+  .when("/admin", {controller:redirectToAdmin, templateUrl:"/partials/404.html"})
   //Auth things
   .otherwise({controller:_404Ctrl, templateUrl:"/partials/404.html"});
 });
@@ -16,10 +17,12 @@ router.config(function($routeProvider, $locationProvider){
 function _404Ctrl(){
 
 }
-
+function redirectToAdmin(){
+ //window.location.replace("/admin#/admin");
+}
 function aboutCtrl($scope, $http){
-  $http.get("/api/blog-description").success(function(data){
-    $scope.description = data;
+  $http.get("/api/about-blog").success(function(data){
+    $scope.description = data.body;
   });
 }
 
