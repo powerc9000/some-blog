@@ -24,16 +24,17 @@ function aboutCtrl($scope, $http){
 }
 
 function mainCtrl($scope, $http, setTitle, $location){
-  var page = $location.search().page || 1;
+  //cast it to an int because javascript is actually dicks
+  var page = (+$location.search().page) || 1;
   $scope.page = page;
   setTitle("Home");
   $scope.count = 0;
   $scope.nextPage = true;
   $scope.nextPrev = function(next){
     if(next){
-      return (+page)+1;
+      return page + 1;
     }else{
-      return (+page)-1;
+      return page - 1;
     }
     
   };

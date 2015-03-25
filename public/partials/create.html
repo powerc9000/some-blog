@@ -1,10 +1,17 @@
 <div ng-switch on="action">
   <h1 ng-switch-when="Edit">Edit post</h1>
-  <h1 ng-switch-when="Create">Create a new Post</h1>
+  <h1 ng-switch-when="Create">Create a new post</h1>
   <h1 ng-switch-when="draft">Edit Draft</h1>
 </div>
-<div class="row-fluid">
-  <div class="create-form col-md-8">
+<div class="row row-fluid toggle-preview">
+  <div class="col-md-4">
+    <a href="#" ng-click="edit_post = false; preview_post = true" class="btn btn-primary" ng-class="{disabled:!edit_post}">Preview Post</a>
+    <a href="#" ng-click="preview_post = false; edit_post = true" class="btn btn-primary" ng-class="{disabled:!preview_post}">Edit Post</a>
+  </div>
+  
+</div>
+<div class="row row-fluid">
+  <div class="create-form col-md-8" ng-show="edit_post">
     <form ng-submit="newPost()">
       <div class="form-group">
         <label for="postTitle">Title</label>
@@ -38,7 +45,7 @@
       
     </form>
   </div>
-  <div class="new-post-preview col-md-4">
+  <div class="new-post-preview col-md-8" ng-show="preview_post">
     <h3>Preview</h3>
     <div markdown="newPostBody" id="preview"></div>
   </div>

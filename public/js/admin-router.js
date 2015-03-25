@@ -85,6 +85,7 @@ function blogSettingsCtrl($scope, $rootScope, $http, setTitle){
 
 function editPostCtrl($scope, $http, $routeParams, $location, setTitle){
   $scope.action = "Edit";
+  $scope.edit_post = true;
   $http.get("/api/post/"+$routeParams.slug).success(function(data){
     $scope.newPostTitle = data.title;
     $scope.newPostBody = data.markdown;
@@ -111,6 +112,7 @@ function draftCtrl($scope, $http, $location, setTitle){
 
 function draftSingleCtrl($scope, $http, $location, $routeParams, setTitle){
   $scope.action = "draft";
+  $scope.edit_post = true;
   setTitle("Edit draft");
   $http.get("/api/draft/"+$routeParams.id).success(function(data){
     $scope.draft = data;
@@ -146,6 +148,7 @@ adminCtrl.resolve = {
 };
 function createCtrl($scope, $http, $location, setTitle){
   $scope.action = "Create";
+  $scope.edit_post = true;
   setTitle("Create Post");
   $scope.newPost = function(){
     $http.post("/api/newpost", {title:$scope.newPostTitle, body:$scope.newPostBody, tags:$scope.tags}).success(function(data){

@@ -48,6 +48,11 @@ var app = angular.module("admin", ["adminRouter", "ngSanitize"]).config(['$httpP
 //     templateUrl: "/partials/admin-breadcrumbs.html"
 //   };
 // });
+function spliceString(str, index, count, add) {
+  var ar = str.split('');
+  ar.splice(index, count, add);
+  return ar.join('');
+}
 
 app.directive("markdown", function($timeout){
   return function(scope, el, attr){
@@ -64,9 +69,23 @@ app.directive("markdown", function($timeout){
         //Split the entire Markdown string into lines then words
         lines = val.split("\n");
         lines.forEach(function(l, i){
+          
+          // while(n !== -1){
+          //   l = spliceString(l, n-1, "\\");
+          //   n = l.indexOf("_");
+          // }
           words = l.split(" ");
           words.forEach(function(w, i){
+            
             w.replace(linkRegex, function(match, idx, word){
+              for(var j =0; j<word.length; j++){
+                if(word[j] === "_"){
+                  
+                  word = spliceString(word, j, 0, "\\");
+                  j++;
+                }
+                //console.log(word);
+              }
               words[i] = "["+word+"]"+"("+match+")";
             });
           });
